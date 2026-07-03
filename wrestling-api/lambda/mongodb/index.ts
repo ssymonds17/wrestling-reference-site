@@ -3,8 +3,17 @@ export { connectToDatabase } from "./client"
 export {
   createWrestler,
   getWrestlers,
+  getWrestlerById,
+  updateWrestler,
+  deleteWrestler,
+  recomputeWrestlerStats,
+  WrestlerReferencedError,
 } from "./services/wrestlers"
-export type { WrestlerListFilters } from "./services/wrestlers"
+export type {
+  WrestlerListFilters,
+  WrestlerUpdateInput,
+  WrestlerRecomputeResult,
+} from "./services/wrestlers"
 
 export { default as Wrestler } from "./models/wrestler"
 export type {

@@ -39,12 +39,48 @@ export class ApiStack extends core.Stack {
       environment: lambdaEnvironment,
     })
 
+    const getWrestlerByIdLambda = new LambdaConstruct(this, "GetWrestlerById", {
+      functionName: "wrestling-get-wrestler-by-id-handler",
+      code: lambda.Code.fromAsset("build/apps/get-wrestler-by-id"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
+    const updateWrestlerLambda = new LambdaConstruct(this, "UpdateWrestler", {
+      functionName: "wrestling-update-wrestler-handler",
+      code: lambda.Code.fromAsset("build/apps/update-wrestler"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
+    const deleteWrestlerLambda = new LambdaConstruct(this, "DeleteWrestler", {
+      functionName: "wrestling-delete-wrestler-handler",
+      code: lambda.Code.fromAsset("build/apps/delete-wrestler"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
+    const recomputeWrestlerLambda = new LambdaConstruct(
+      this,
+      "RecomputeWrestler",
+      {
+        functionName: "wrestling-recompute-wrestler-handler",
+        code: lambda.Code.fromAsset("build/apps/recompute-wrestler"),
+        handler: "index.handler",
+        timeout: core.Duration.seconds(30),
+        environment: lambdaEnvironment,
+      }
+    )
+
     // API Gateway
     const api = new apigateway.RestApi(this, "WrestlingApi", {
       restApiName: "wrestling-api",
     })
 
-    // RESOURCES - Wrestlers
+    // RESOURCES - Wrestlers (collection)
     const wrestlers = api.root.addResource("wrestlers")
     wrestlers.addMethod(
       "GET",
@@ -55,6 +91,7 @@ export class ApiStack extends core.Stack {
       allowMethods: ["GET"],
     })
 
+    // RESOURCES - Wrestler (single)
     const wrestler = api.root.addResource("wrestler")
     wrestler.addMethod(
       "POST",
@@ -63,6 +100,34 @@ export class ApiStack extends core.Stack {
     wrestler.addCorsPreflight({
       allowOrigins: ["*"],
       allowMethods: ["POST"],
+    })
+
+    const wrestlerById = wrestler.addResource("{id}")
+    wrestlerById.addMethod(
+      "GET",
+      new apigateway.LambdaIntegration(getWrestlerByIdLambda.function)
+    )
+    wrestlerById.addMethod(
+      "PATCH",
+      new apigateway.LambdaIntegration(updateWrestlerLambda.function)
+    )
+    wrestlerById.addMethod(
+      "DELETE",
+      new apigateway.LambdaIntegration(deleteWrestlerLambda.function)
+    )
+    wrestlerById.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["GET", "PATCH", "DELETE"],
+    })
+
+    const wrestlerRecompute = wrestlerById.addResource("recompute")
+    wrestlerRecompute.addMethod(
+      "PUT",
+      new apigateway.LambdaIntegration(recomputeWrestlerLambda.function)
+    )
+    wrestlerRecompute.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["PUT"],
     })
   }
 }
