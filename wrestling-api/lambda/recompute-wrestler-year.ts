@@ -7,7 +7,7 @@ const handlerImpl = async (event: any, _userId: string) => {
   try {
     const wrestlerId = event.pathParameters?.id
     const yearParam = event.pathParameters?.year
-    const year = yearParam ? Number.parseInt(yearParam, 10) : NaN
+    const year = yearParam ? Number.parseInt(yearParam, 10) : Number.NaN
 
     if (!wrestlerId) {
       return createApiResponse(400, { message: "Wrestler id is required" })

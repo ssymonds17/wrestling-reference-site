@@ -63,6 +63,8 @@ export {
 } from "./services/wrestlerYears"
 export type { YearStandingsSortBy } from "./services/wrestlerYears"
 
+export { getCareerLeaderboard } from "./services/leaderboard"
+
 export { default as Wrestler } from "./models/wrestler"
 export type {
   WrestlerDocument,

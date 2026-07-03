@@ -259,6 +259,18 @@ export class ApiStack extends core.Stack {
       }
     )
 
+    const getCareerLeaderboardLambda = new LambdaConstruct(
+      this,
+      "GetCareerLeaderboard",
+      {
+        functionName: "wrestling-get-career-leaderboard-handler",
+        code: lambda.Code.fromAsset("build/apps/get-career-leaderboard"),
+        handler: "index.handler",
+        timeout: core.Duration.seconds(30),
+        environment: lambdaEnvironment,
+      }
+    )
+
     // API Gateway
     const api = new apigateway.RestApi(this, "WrestlingApi", {
       restApiName: "wrestling-api",
@@ -495,6 +507,17 @@ export class ApiStack extends core.Stack {
       new apigateway.LambdaIntegration(getYearStandingsLambda.function)
     )
     yearStandings.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["GET"],
+    })
+
+    // RESOURCES - Career leaderboard
+    const careerLeaderboard = api.root.addResource("career-leaderboard")
+    careerLeaderboard.addMethod(
+      "GET",
+      new apigateway.LambdaIntegration(getCareerLeaderboardLambda.function)
+    )
+    careerLeaderboard.addCorsPreflight({
       allowOrigins: ["*"],
       allowMethods: ["GET"],
     })
