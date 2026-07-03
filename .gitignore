@@ -1,0 +1,43 @@
+# Planning scratchpad (not tracked)
+PLAN.md
+
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Build output
+dist/
+build/
+.next/
+out/
+
+# CDK
+cdk.out/
+cdk.context.json
+
+# Ingestion side files (deleted after ingestion completes)
+*-id-map.json
+failed_matches.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test coverage
+coverage/
