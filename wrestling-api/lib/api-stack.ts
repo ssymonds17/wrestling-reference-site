@@ -120,6 +120,15 @@ export class ApiStack extends core.Stack {
       environment: lambdaEnvironment,
     })
 
+    // Lambda function for Search
+    const searchLambda = new LambdaConstruct(this, "Search", {
+      functionName: "wrestling-search-handler",
+      code: lambda.Code.fromAsset("build/apps/search"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
     // API Gateway
     const api = new apigateway.RestApi(this, "WrestlingApi", {
       restApiName: "wrestling-api",
@@ -213,6 +222,17 @@ export class ApiStack extends core.Stack {
     promotionById.addCorsPreflight({
       allowOrigins: ["*"],
       allowMethods: ["GET", "PATCH", "DELETE"],
+    })
+
+    // RESOURCES - Search
+    const searchResource = api.root.addResource("search")
+    searchResource.addMethod(
+      "GET",
+      new apigateway.LambdaIntegration(searchLambda.function)
+    )
+    searchResource.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["GET"],
     })
   }
 }

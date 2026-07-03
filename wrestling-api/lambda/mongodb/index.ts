@@ -28,6 +28,9 @@ export type {
   PromotionUpdateInput,
 } from "./services/promotions"
 
+export { search } from "./services/search"
+export type { SearchItemType, SearchFilters } from "./services/search"
+
 export { default as Wrestler } from "./models/wrestler"
 export type {
   WrestlerDocument,
