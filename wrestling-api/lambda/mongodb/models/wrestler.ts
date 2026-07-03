@@ -21,6 +21,8 @@ export interface WrestlerDocument extends mongoose.Document {
   totalMatches: number
   ratingCounts: WrestlerRatingCounts
   careerScore: number
+  // Populated on demand via the "years" virtual — undefined otherwise.
+  years?: unknown[]
 }
 
 export type WrestlerData = {
@@ -41,20 +43,35 @@ const aliasSubSchema = new mongoose.Schema(
   { _id: false }
 )
 
-const wrestlerSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  displayName: { type: String, required: true },
-  aliases: { type: [aliasSubSchema], default: [] },
-  cagematchUrl: { type: String },
-  totalMatches: { type: Number, default: 0 },
-  ratingCounts: {
-    rating1: { type: Number, default: 0 },
-    rating2: { type: Number, default: 0 },
-    rating3: { type: Number, default: 0 },
-    rating4: { type: Number, default: 0 },
-    rating5: { type: Number, default: 0 },
+const wrestlerSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    displayName: { type: String, required: true },
+    aliases: { type: [aliasSubSchema], default: [] },
+    cagematchUrl: { type: String },
+    totalMatches: { type: Number, default: 0 },
+    ratingCounts: {
+      rating1: { type: Number, default: 0 },
+      rating2: { type: Number, default: 0 },
+      rating3: { type: Number, default: 0 },
+      rating4: { type: Number, default: 0 },
+      rating5: { type: Number, default: 0 },
+    },
+    careerScore: { type: Number, default: 0 },
   },
-  careerScore: { type: Number, default: 0 },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+)
+
+// Virtual populate: WrestlerYear docs referencing this wrestler.
+// Endpoints that need the year-by-year breakdown call
+// .populate({ path: "years", select: "..." }).
+wrestlerSchema.virtual("years", {
+  ref: "WrestlerYear",
+  localField: "_id",
+  foreignField: "wrestlerId",
 })
 
 wrestlerSchema.index({ name: 1 })

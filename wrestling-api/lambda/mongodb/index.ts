@@ -1,5 +1,11 @@
 export { connectToDatabase } from "./client"
 
+export {
+  createWrestler,
+  getWrestlers,
+} from "./services/wrestlers"
+export type { WrestlerListFilters } from "./services/wrestlers"
+
 export { default as Wrestler } from "./models/wrestler"
 export type {
   WrestlerDocument,
