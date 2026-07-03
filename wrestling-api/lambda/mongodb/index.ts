@@ -15,6 +15,19 @@ export type {
   WrestlerRecomputeResult,
 } from "./services/wrestlers"
 
+export {
+  createPromotion,
+  getPromotions,
+  getPromotionById,
+  updatePromotion,
+  deletePromotion,
+  PromotionReferencedError,
+} from "./services/promotions"
+export type {
+  PromotionListFilters,
+  PromotionUpdateInput,
+} from "./services/promotions"
+
 export { default as Wrestler } from "./models/wrestler"
 export type {
   WrestlerDocument,

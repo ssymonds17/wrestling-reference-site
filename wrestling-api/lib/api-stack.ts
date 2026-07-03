@@ -75,6 +75,51 @@ export class ApiStack extends core.Stack {
       }
     )
 
+    // Lambda functions for Promotions
+    const createPromotionLambda = new LambdaConstruct(this, "CreatePromotion", {
+      functionName: "wrestling-create-promotion-handler",
+      code: lambda.Code.fromAsset("build/apps/create-promotion"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
+    const getPromotionsLambda = new LambdaConstruct(this, "GetPromotions", {
+      functionName: "wrestling-get-promotions-handler",
+      code: lambda.Code.fromAsset("build/apps/get-promotions"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
+    const getPromotionByIdLambda = new LambdaConstruct(
+      this,
+      "GetPromotionById",
+      {
+        functionName: "wrestling-get-promotion-by-id-handler",
+        code: lambda.Code.fromAsset("build/apps/get-promotion-by-id"),
+        handler: "index.handler",
+        timeout: core.Duration.seconds(30),
+        environment: lambdaEnvironment,
+      }
+    )
+
+    const updatePromotionLambda = new LambdaConstruct(this, "UpdatePromotion", {
+      functionName: "wrestling-update-promotion-handler",
+      code: lambda.Code.fromAsset("build/apps/update-promotion"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
+    const deletePromotionLambda = new LambdaConstruct(this, "DeletePromotion", {
+      functionName: "wrestling-delete-promotion-handler",
+      code: lambda.Code.fromAsset("build/apps/delete-promotion"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
     // API Gateway
     const api = new apigateway.RestApi(this, "WrestlingApi", {
       restApiName: "wrestling-api",
@@ -128,6 +173,46 @@ export class ApiStack extends core.Stack {
     wrestlerRecompute.addCorsPreflight({
       allowOrigins: ["*"],
       allowMethods: ["PUT"],
+    })
+
+    // RESOURCES - Promotions (collection)
+    const promotions = api.root.addResource("promotions")
+    promotions.addMethod(
+      "GET",
+      new apigateway.LambdaIntegration(getPromotionsLambda.function)
+    )
+    promotions.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["GET"],
+    })
+
+    // RESOURCES - Promotion (single)
+    const promotion = api.root.addResource("promotion")
+    promotion.addMethod(
+      "POST",
+      new apigateway.LambdaIntegration(createPromotionLambda.function)
+    )
+    promotion.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["POST"],
+    })
+
+    const promotionById = promotion.addResource("{id}")
+    promotionById.addMethod(
+      "GET",
+      new apigateway.LambdaIntegration(getPromotionByIdLambda.function)
+    )
+    promotionById.addMethod(
+      "PATCH",
+      new apigateway.LambdaIntegration(updatePromotionLambda.function)
+    )
+    promotionById.addMethod(
+      "DELETE",
+      new apigateway.LambdaIntegration(deletePromotionLambda.function)
+    )
+    promotionById.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["GET", "PATCH", "DELETE"],
     })
   }
 }
