@@ -129,6 +129,136 @@ export class ApiStack extends core.Stack {
       environment: lambdaEnvironment,
     })
 
+    // Lambda functions for Matches
+    const createMatchLambda = new LambdaConstruct(this, "CreateMatch", {
+      functionName: "wrestling-create-match-handler",
+      code: lambda.Code.fromAsset("build/apps/create-match"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
+    const getMatchesLambda = new LambdaConstruct(this, "GetMatches", {
+      functionName: "wrestling-get-matches-handler",
+      code: lambda.Code.fromAsset("build/apps/get-matches"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
+    const getMatchByIdLambda = new LambdaConstruct(this, "GetMatchById", {
+      functionName: "wrestling-get-match-by-id-handler",
+      code: lambda.Code.fromAsset("build/apps/get-match-by-id"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
+    const deleteMatchLambda = new LambdaConstruct(this, "DeleteMatch", {
+      functionName: "wrestling-delete-match-handler",
+      code: lambda.Code.fromAsset("build/apps/delete-match"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
+    const updateMatchLambda = new LambdaConstruct(this, "UpdateMatch", {
+      functionName: "wrestling-update-match-handler",
+      code: lambda.Code.fromAsset("build/apps/update-match"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
+    const updateParticipantRatingLambda = new LambdaConstruct(
+      this,
+      "UpdateParticipantRating",
+      {
+        functionName: "wrestling-update-participant-rating-handler",
+        code: lambda.Code.fromAsset("build/apps/update-participant-rating"),
+        handler: "index.handler",
+        timeout: core.Duration.seconds(30),
+        environment: lambdaEnvironment,
+      }
+    )
+
+    const updateOverallMatchRatingLambda = new LambdaConstruct(
+      this,
+      "UpdateOverallMatchRating",
+      {
+        functionName: "wrestling-update-overall-match-rating-handler",
+        code: lambda.Code.fromAsset("build/apps/update-overall-match-rating"),
+        handler: "index.handler",
+        timeout: core.Duration.seconds(30),
+        environment: lambdaEnvironment,
+      }
+    )
+
+    // Lambda functions for WrestlerYears / tiers / recomputes
+    const getWrestlerYearsLambda = new LambdaConstruct(
+      this,
+      "GetWrestlerYears",
+      {
+        functionName: "wrestling-get-wrestler-years-handler",
+        code: lambda.Code.fromAsset("build/apps/get-wrestler-years"),
+        handler: "index.handler",
+        timeout: core.Duration.seconds(30),
+        environment: lambdaEnvironment,
+      }
+    )
+
+    const getYearStandingsLambda = new LambdaConstruct(
+      this,
+      "GetYearStandings",
+      {
+        functionName: "wrestling-get-year-standings-handler",
+        code: lambda.Code.fromAsset("build/apps/get-year-standings"),
+        handler: "index.handler",
+        timeout: core.Duration.seconds(30),
+        environment: lambdaEnvironment,
+      }
+    )
+
+    const getYearsLambda = new LambdaConstruct(this, "GetYears", {
+      functionName: "wrestling-get-years-handler",
+      code: lambda.Code.fromAsset("build/apps/get-years"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
+    const assignTierLambda = new LambdaConstruct(this, "AssignTier", {
+      functionName: "wrestling-assign-tier-handler",
+      code: lambda.Code.fromAsset("build/apps/assign-tier"),
+      handler: "index.handler",
+      timeout: core.Duration.seconds(30),
+      environment: lambdaEnvironment,
+    })
+
+    const recomputeWrestlerYearLambda = new LambdaConstruct(
+      this,
+      "RecomputeWrestlerYear",
+      {
+        functionName: "wrestling-recompute-wrestler-year-handler",
+        code: lambda.Code.fromAsset("build/apps/recompute-wrestler-year"),
+        handler: "index.handler",
+        timeout: core.Duration.seconds(30),
+        environment: lambdaEnvironment,
+      }
+    )
+
+    const recomputeCareerScoreLambda = new LambdaConstruct(
+      this,
+      "RecomputeCareerScore",
+      {
+        functionName: "wrestling-recompute-career-score-handler",
+        code: lambda.Code.fromAsset("build/apps/recompute-career-score"),
+        handler: "index.handler",
+        timeout: core.Duration.seconds(30),
+        environment: lambdaEnvironment,
+      }
+    )
+
     // API Gateway
     const api = new apigateway.RestApi(this, "WrestlingApi", {
       restApiName: "wrestling-api",
@@ -184,6 +314,53 @@ export class ApiStack extends core.Stack {
       allowMethods: ["PUT"],
     })
 
+    // /wrestler/{id}/years
+    const wrestlerYearsRes = wrestlerById.addResource("years")
+    wrestlerYearsRes.addMethod(
+      "GET",
+      new apigateway.LambdaIntegration(getWrestlerYearsLambda.function)
+    )
+    wrestlerYearsRes.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["GET"],
+    })
+
+    // /wrestler/{id}/year/{year}/{tier | recompute}
+    const wrestlerYear = wrestlerById.addResource("year")
+    const wrestlerYearById = wrestlerYear.addResource("{year}")
+
+    const wrestlerYearTier = wrestlerYearById.addResource("tier")
+    wrestlerYearTier.addMethod(
+      "PUT",
+      new apigateway.LambdaIntegration(assignTierLambda.function)
+    )
+    wrestlerYearTier.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["PUT"],
+    })
+
+    const wrestlerYearRecompute = wrestlerYearById.addResource("recompute")
+    wrestlerYearRecompute.addMethod(
+      "PUT",
+      new apigateway.LambdaIntegration(recomputeWrestlerYearLambda.function)
+    )
+    wrestlerYearRecompute.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["PUT"],
+    })
+
+    // /wrestler/{id}/career/recompute
+    const wrestlerCareer = wrestlerById.addResource("career")
+    const wrestlerCareerRecompute = wrestlerCareer.addResource("recompute")
+    wrestlerCareerRecompute.addMethod(
+      "PUT",
+      new apigateway.LambdaIntegration(recomputeCareerScoreLambda.function)
+    )
+    wrestlerCareerRecompute.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["PUT"],
+    })
+
     // RESOURCES - Promotions (collection)
     const promotions = api.root.addResource("promotions")
     promotions.addMethod(
@@ -231,6 +408,93 @@ export class ApiStack extends core.Stack {
       new apigateway.LambdaIntegration(searchLambda.function)
     )
     searchResource.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["GET"],
+    })
+
+    // RESOURCES - Matches (collection)
+    const matches = api.root.addResource("matches")
+    matches.addMethod(
+      "GET",
+      new apigateway.LambdaIntegration(getMatchesLambda.function)
+    )
+    matches.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["GET"],
+    })
+
+    // RESOURCES - Match (single)
+    const match = api.root.addResource("match")
+    match.addMethod(
+      "POST",
+      new apigateway.LambdaIntegration(createMatchLambda.function)
+    )
+    match.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["POST"],
+    })
+
+    const matchById = match.addResource("{id}")
+    matchById.addMethod(
+      "GET",
+      new apigateway.LambdaIntegration(getMatchByIdLambda.function)
+    )
+    matchById.addMethod(
+      "PATCH",
+      new apigateway.LambdaIntegration(updateMatchLambda.function)
+    )
+    matchById.addMethod(
+      "DELETE",
+      new apigateway.LambdaIntegration(deleteMatchLambda.function)
+    )
+    matchById.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["GET", "PATCH", "DELETE"],
+    })
+
+    // /match/{id}/overall-rating
+    const matchOverallRating = matchById.addResource("overall-rating")
+    matchOverallRating.addMethod(
+      "PUT",
+      new apigateway.LambdaIntegration(updateOverallMatchRatingLambda.function)
+    )
+    matchOverallRating.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["PUT"],
+    })
+
+    // /match/{id}/participant/{wrestlerId}/rating
+    const matchParticipant = matchById.addResource("participant")
+    const matchParticipantById = matchParticipant.addResource("{wrestlerId}")
+    const matchParticipantRating = matchParticipantById.addResource("rating")
+    matchParticipantRating.addMethod(
+      "PUT",
+      new apigateway.LambdaIntegration(updateParticipantRatingLambda.function)
+    )
+    matchParticipantRating.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["PUT"],
+    })
+
+    // RESOURCES - Years
+    const yearsRes = api.root.addResource("years")
+    yearsRes.addMethod(
+      "GET",
+      new apigateway.LambdaIntegration(getYearsLambda.function)
+    )
+    yearsRes.addCorsPreflight({
+      allowOrigins: ["*"],
+      allowMethods: ["GET"],
+    })
+
+    const yearRes = api.root.addResource("year")
+    const yearByN = yearRes.addResource("{year}")
+    const yearStandings = yearByN.addResource("standings")
+    yearStandings.addMethod(
+      "GET",
+      new apigateway.LambdaIntegration(getYearStandingsLambda.function)
+    )
+    yearStandings.addCorsPreflight({
       allowOrigins: ["*"],
       allowMethods: ["GET"],
     })

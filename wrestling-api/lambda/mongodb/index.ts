@@ -31,6 +31,38 @@ export type {
 export { search } from "./services/search"
 export type { SearchItemType, SearchFilters } from "./services/search"
 
+export {
+  createMatch,
+  getMatches,
+  getMatchById,
+  deleteMatch,
+  updateMatch,
+  updateParticipantRating,
+  updateOverallMatchRating,
+  InvalidOverallMatchRatingError,
+  ParticipantNotFoundError,
+} from "./services/matches"
+export type {
+  MatchListFilters,
+  CreateMatchInput,
+  CreateMatchParticipantInput,
+  UpdateMatchInput,
+  UpdateMatchResult,
+  UpdateParticipantRatingResult,
+  AffectedWrestlerYear,
+} from "./services/matches"
+
+export {
+  getWrestlerYears,
+  getYearStandings,
+  getDistinctYears,
+  recomputeWrestlerYear,
+  recomputeCareerScore,
+  assignTier,
+  InvalidTierError,
+} from "./services/wrestlerYears"
+export type { YearStandingsSortBy } from "./services/wrestlerYears"
+
 export { default as Wrestler } from "./models/wrestler"
 export type {
   WrestlerDocument,
