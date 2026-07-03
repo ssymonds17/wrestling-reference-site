@@ -1,0 +1,35 @@
+{
+  "name": "wrestling-api",
+  "version": "0.1.0",
+  "bin": {
+    "wrestling-api": "bin/wrestling-api.js"
+  },
+  "scripts": {
+    "build:all": "echo \"No handlers to build yet\"",
+    "test": "jest --passWithNoTests",
+    "cdk": "npx cdk",
+    "synth": "rm -rf ./build/cdk.out && npx cdk synth -q -o ./build/cdk.out",
+    "synth-vars": "npx dotenv -e .env -- npm run synth",
+    "deploy": "npx cdk deploy -a ./build/cdk.out"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/mongoose": "^5.11.96",
+    "@types/node": "^22.7.9",
+    "aws-cdk": "^2.1020.2",
+    "dotenv-cli": "^11.0.0",
+    "esbuild": "^0.25.1",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.6.3"
+  },
+  "dependencies": {
+    "@aws-lambda-powertools/logger": "^2.17.0",
+    "@clerk/backend": "^3.2.3",
+    "@types/aws-lambda": "^8.10.147",
+    "aws-cdk-lib": "^2.180.0",
+    "constructs": "^10.4.2",
+    "mongoose": "^8.16.1"
+  }
+}
