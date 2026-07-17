@@ -23,6 +23,10 @@ const buildPatch = (body: any): PromotionUpdateInput => {
     patch.notes = body.notes
   }
 
+  if (body.cagematchUrl === null || typeof body.cagematchUrl === "string") {
+    patch.cagematchUrl = body.cagematchUrl
+  }
+
   return patch
 }
 
@@ -38,7 +42,8 @@ const handlerImpl = async (event: any, _userId: string) => {
 
     if (Object.keys(patch).length === 0) {
       return createApiResponse(400, {
-        message: "No valid fields to update (displayName, aliases, notes)",
+        message:
+          "No valid fields to update (displayName, aliases, notes, cagematchUrl)",
       })
     }
 

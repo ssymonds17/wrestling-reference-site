@@ -23,6 +23,7 @@ export const createPromotion = async (input: {
   displayName: string
   aliases?: string[]
   notes?: string
+  cagematchUrl?: string
 }) => {
   const aliasInputs = input.aliases ?? []
   const data: PromotionData = {
@@ -30,6 +31,7 @@ export const createPromotion = async (input: {
     displayName: input.displayName,
     aliases: aliasInputs.map(buildAlias),
     notes: input.notes,
+    cagematchUrl: input.cagematchUrl,
   }
   return Promotion.create(data)
 }
@@ -49,6 +51,7 @@ export interface PromotionUpdateInput {
   displayName?: string
   aliases?: string[]
   notes?: string | null
+  cagematchUrl?: string | null
 }
 
 export const updatePromotion = async (
@@ -71,6 +74,12 @@ export const updatePromotion = async (
     unsets.notes = ""
   } else if (input.notes !== undefined) {
     updates.notes = input.notes
+  }
+
+  if (input.cagematchUrl === null) {
+    unsets.cagematchUrl = ""
+  } else if (input.cagematchUrl !== undefined) {
+    updates.cagematchUrl = input.cagematchUrl
   }
 
   const updateQuery: Record<string, unknown> = {}

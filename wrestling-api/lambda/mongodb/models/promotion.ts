@@ -10,6 +10,7 @@ export interface PromotionDocument extends mongoose.Document {
   displayName: string
   aliases: PromotionAlias[]
   notes?: string
+  cagematchUrl?: string
 }
 
 export type PromotionData = {
@@ -17,6 +18,7 @@ export type PromotionData = {
   displayName: string
   aliases?: PromotionAlias[]
   notes?: string
+  cagematchUrl?: string
 }
 
 const aliasSubSchema = new mongoose.Schema(
@@ -32,6 +34,7 @@ const promotionSchema = new mongoose.Schema({
   displayName: { type: String, required: true },
   aliases: { type: [aliasSubSchema], default: [] },
   notes: { type: String },
+  cagematchUrl: { type: String },
 })
 
 promotionSchema.index({ name: 1 })

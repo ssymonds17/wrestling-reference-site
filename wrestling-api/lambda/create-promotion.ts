@@ -19,12 +19,15 @@ const handlerImpl = async (event: any, _userId: string) => {
       displayName: body.displayName,
       aliases: Array.isArray(body.aliases) ? body.aliases : undefined,
       notes: typeof body.notes === "string" ? body.notes : undefined,
+      cagematchUrl:
+        typeof body.cagematchUrl === "string" ? body.cagematchUrl : undefined,
     })
 
     return createApiResponse(201, {
       id: promotion._id,
       displayName: promotion.displayName,
       aliases: promotion.aliases,
+      cagematchUrl: promotion.cagematchUrl,
       message: "Successfully created promotion",
     })
   } catch (error) {
