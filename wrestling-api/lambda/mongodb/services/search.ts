@@ -14,17 +14,23 @@ const escapeRegex = (str: string) =>
 
 const DEFAULT_LIMIT = 20
 
-const buildAliasedQuery = (regex: RegExp, includeAbbreviation: boolean) => {
-  const or: Record<string, RegExp>[] = [
+// Wrestler aliases are single-name { search, display }.
+const wrestlerQuery = (regex: RegExp) => ({
+  $or: [{ name: regex }, { displayName: regex }, { "aliases.search": regex }],
+})
+
+// Promotion aliases are { abbreviation, fullName } pairs; both forms are
+// searchable, and the canonical abbreviation is its own field. So "WWE",
+// "WWF", and "World Wrestling Federation" all resolve to the same doc.
+const promotionQuery = (regex: RegExp) => ({
+  $or: [
     { name: regex },
-    { "aliases.search": regex },
     { displayName: regex },
-  ]
-  if (includeAbbreviation) {
-    or.push({ abbreviation: regex })
-  }
-  return { $or: or }
-}
+    { abbreviation: regex },
+    { "aliases.abbreviation": regex },
+    { "aliases.fullName": regex },
+  ],
+})
 
 export const search = async ({
   searchString,
@@ -34,13 +40,13 @@ export const search = async ({
   const regex = new RegExp(escapeRegex(searchString), "i")
 
   if (itemType === "wrestler") {
-    return Wrestler.find(buildAliasedQuery(regex, false))
+    return Wrestler.find(wrestlerQuery(regex))
       .sort({ displayName: 1 })
       .limit(limit)
       .exec()
   }
 
-  return Promotion.find(buildAliasedQuery(regex, true))
+  return Promotion.find(promotionQuery(regex))
     .sort({ displayName: 1 })
     .limit(limit)
     .exec()

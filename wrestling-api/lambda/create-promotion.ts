@@ -3,6 +3,17 @@ import { requireAuth } from "./auth"
 import { connectToDatabase } from "./mongodb"
 import { createPromotion } from "./mongodb/services/promotions"
 
+const isAliasPair = (
+  a: unknown
+): a is { abbreviation: string; fullName: string } =>
+  !!a &&
+  typeof a === "object" &&
+  typeof (a as { abbreviation?: unknown }).abbreviation === "string" &&
+  typeof (a as { fullName?: unknown }).fullName === "string"
+
+const parseAliases = (raw: unknown) =>
+  Array.isArray(raw) ? raw.filter(isAliasPair) : undefined
+
 const handlerImpl = async (event: any, _userId: string) => {
   try {
     const body = JSON.parse(event.body || "{}")
@@ -19,7 +30,7 @@ const handlerImpl = async (event: any, _userId: string) => {
       displayName: body.displayName,
       abbreviation:
         typeof body.abbreviation === "string" ? body.abbreviation : undefined,
-      aliases: Array.isArray(body.aliases) ? body.aliases : undefined,
+      aliases: parseAliases(body.aliases),
       notes: typeof body.notes === "string" ? body.notes : undefined,
       cagematchUrl:
         typeof body.cagematchUrl === "string" ? body.cagematchUrl : undefined,

@@ -1,8 +1,8 @@
 import mongoose from "mongoose"
 
 export interface PromotionAlias {
-  search: string
-  display: string
+  abbreviation: string
+  fullName: string
 }
 
 export interface PromotionDocument extends mongoose.Document {
@@ -25,8 +25,8 @@ export type PromotionData = {
 
 const aliasSubSchema = new mongoose.Schema(
   {
-    search: { type: String, required: true },
-    display: { type: String, required: true },
+    abbreviation: { type: String, required: true },
+    fullName: { type: String, required: true },
   },
   { _id: false }
 )
@@ -42,7 +42,8 @@ const promotionSchema = new mongoose.Schema({
 
 promotionSchema.index({ name: 1 })
 promotionSchema.index({ abbreviation: 1 })
-promotionSchema.index({ "aliases.search": 1 })
+promotionSchema.index({ "aliases.abbreviation": 1 })
+promotionSchema.index({ "aliases.fullName": 1 })
 
 export default mongoose.model<PromotionDocument>(
   "Promotion",

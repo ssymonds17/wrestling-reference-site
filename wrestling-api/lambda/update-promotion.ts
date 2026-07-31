@@ -19,7 +19,11 @@ const buildPatch = (body: any): PromotionUpdateInput => {
 
   if (Array.isArray(body.aliases)) {
     patch.aliases = body.aliases.filter(
-      (a: unknown): a is string => typeof a === "string"
+      (a: unknown): a is { abbreviation: string; fullName: string } =>
+        !!a &&
+        typeof a === "object" &&
+        typeof (a as { abbreviation?: unknown }).abbreviation === "string" &&
+        typeof (a as { fullName?: unknown }).fullName === "string"
     )
   }
 

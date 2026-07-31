@@ -4,8 +4,8 @@ import { createAuthenticatedClient } from './auth-api'
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
 
 export interface PromotionAlias {
-  search: string
-  display: string
+  abbreviation: string
+  fullName: string
 }
 
 export interface Promotion {
@@ -21,7 +21,7 @@ export interface Promotion {
 export interface CreatePromotionInput {
   displayName: string
   abbreviation?: string
-  aliases?: string[]
+  aliases?: PromotionAlias[]
   notes?: string
   cagematchUrl?: string
 }

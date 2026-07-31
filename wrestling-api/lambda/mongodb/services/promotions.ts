@@ -1,4 +1,4 @@
-import Promotion, { PromotionData } from "../models/promotion"
+import Promotion, { PromotionData, PromotionAlias } from "../models/promotion"
 import Match from "../models/match"
 
 export interface PromotionListFilters {
@@ -14,15 +14,15 @@ const SORT_ORDERS: Record<
   name: { name: 1 },
 }
 
-const buildAlias = (display: string) => ({
-  search: display.toLowerCase(),
-  display,
+const buildAlias = (alias: PromotionAlias): PromotionAlias => ({
+  abbreviation: alias.abbreviation.trim(),
+  fullName: alias.fullName.trim(),
 })
 
 export const createPromotion = async (input: {
   displayName: string
   abbreviation?: string
-  aliases?: string[]
+  aliases?: PromotionAlias[]
   notes?: string
   cagematchUrl?: string
 }) => {
@@ -52,7 +52,7 @@ export const getPromotionById = async (id: string) => {
 export interface PromotionUpdateInput {
   displayName?: string
   abbreviation?: string | null
-  aliases?: string[]
+  aliases?: PromotionAlias[]
   notes?: string | null
   cagematchUrl?: string | null
 }
