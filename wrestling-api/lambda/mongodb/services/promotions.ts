@@ -21,6 +21,7 @@ const buildAlias = (display: string) => ({
 
 export const createPromotion = async (input: {
   displayName: string
+  abbreviation?: string
   aliases?: string[]
   notes?: string
   cagematchUrl?: string
@@ -29,6 +30,7 @@ export const createPromotion = async (input: {
   const data: PromotionData = {
     name: input.displayName.toLowerCase(),
     displayName: input.displayName,
+    abbreviation: input.abbreviation,
     aliases: aliasInputs.map(buildAlias),
     notes: input.notes,
     cagematchUrl: input.cagematchUrl,
@@ -49,6 +51,7 @@ export const getPromotionById = async (id: string) => {
 
 export interface PromotionUpdateInput {
   displayName?: string
+  abbreviation?: string | null
   aliases?: string[]
   notes?: string | null
   cagematchUrl?: string | null
@@ -64,6 +67,12 @@ export const updatePromotion = async (
   if (input.displayName !== undefined) {
     updates.displayName = input.displayName
     updates.name = input.displayName.toLowerCase()
+  }
+
+  if (input.abbreviation === null) {
+    unsets.abbreviation = ""
+  } else if (input.abbreviation !== undefined) {
+    updates.abbreviation = input.abbreviation
   }
 
   if (input.aliases !== undefined) {

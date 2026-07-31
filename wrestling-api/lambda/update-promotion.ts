@@ -13,6 +13,10 @@ const buildPatch = (body: any): PromotionUpdateInput => {
     patch.displayName = body.displayName
   }
 
+  if (body.abbreviation === null || typeof body.abbreviation === "string") {
+    patch.abbreviation = body.abbreviation
+  }
+
   if (Array.isArray(body.aliases)) {
     patch.aliases = body.aliases.filter(
       (a: unknown): a is string => typeof a === "string"
@@ -43,7 +47,7 @@ const handlerImpl = async (event: any, _userId: string) => {
     if (Object.keys(patch).length === 0) {
       return createApiResponse(400, {
         message:
-          "No valid fields to update (displayName, aliases, notes, cagematchUrl)",
+          "No valid fields to update (displayName, abbreviation, aliases, notes, cagematchUrl)",
       })
     }
 

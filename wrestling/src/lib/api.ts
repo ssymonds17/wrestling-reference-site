@@ -1,5 +1,65 @@
+import axios from 'axios'
+import { createAuthenticatedClient } from './auth-api'
+
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
 
-// Endpoint URLs are added here as backend routes come online.
-// See PLAN.md > "API endpoints" for the full target surface.
-export const API_ENDPOINTS = {} as const
+export interface PromotionAlias {
+  search: string
+  display: string
+}
+
+export interface Promotion {
+  _id: string
+  name: string
+  displayName: string
+  abbreviation?: string
+  aliases: PromotionAlias[]
+  notes?: string
+  cagematchUrl?: string
+}
+
+export interface CreatePromotionInput {
+  displayName: string
+  abbreviation?: string
+  aliases?: string[]
+  notes?: string
+  cagematchUrl?: string
+}
+
+export interface CreatePromotionResponse {
+  id: string
+  displayName: string
+  abbreviation?: string
+  aliases: PromotionAlias[]
+  cagematchUrl?: string
+  message: string
+}
+
+export interface ListResponse<T> {
+  data: T[]
+  count: number
+}
+
+type GetToken = () => Promise<string | null>
+
+// Routes are singular for writes, plural for reads. GET /promotions is public;
+// POST /promotion requires a Clerk JWT (requireAuth on the Lambda).
+
+export const getPromotions = async (): Promise<ListResponse<Promotion>> => {
+  const { data } = await axios.get<ListResponse<Promotion>>(
+    `${API_URL}/promotions`,
+  )
+  return data
+}
+
+export const createPromotion = async (
+  input: CreatePromotionInput,
+  getToken: GetToken,
+): Promise<CreatePromotionResponse> => {
+  const client = await createAuthenticatedClient(getToken)
+  const { data } = await client.post<CreatePromotionResponse>(
+    `${API_URL}/promotion`,
+    input,
+  )
+  return data
+}

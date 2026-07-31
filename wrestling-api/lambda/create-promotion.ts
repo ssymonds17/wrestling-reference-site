@@ -17,6 +17,8 @@ const handlerImpl = async (event: any, _userId: string) => {
 
     const promotion = await createPromotion({
       displayName: body.displayName,
+      abbreviation:
+        typeof body.abbreviation === "string" ? body.abbreviation : undefined,
       aliases: Array.isArray(body.aliases) ? body.aliases : undefined,
       notes: typeof body.notes === "string" ? body.notes : undefined,
       cagematchUrl:
@@ -26,6 +28,7 @@ const handlerImpl = async (event: any, _userId: string) => {
     return createApiResponse(201, {
       id: promotion._id,
       displayName: promotion.displayName,
+      abbreviation: promotion.abbreviation,
       aliases: promotion.aliases,
       cagematchUrl: promotion.cagematchUrl,
       message: "Successfully created promotion",

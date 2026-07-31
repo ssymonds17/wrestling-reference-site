@@ -14,13 +14,17 @@ const escapeRegex = (str: string) =>
 
 const DEFAULT_LIMIT = 20
 
-const buildAliasedQuery = (regex: RegExp) => ({
-  $or: [
+const buildAliasedQuery = (regex: RegExp, includeAbbreviation: boolean) => {
+  const or: Record<string, RegExp>[] = [
     { name: regex },
     { "aliases.search": regex },
     { displayName: regex },
-  ],
-})
+  ]
+  if (includeAbbreviation) {
+    or.push({ abbreviation: regex })
+  }
+  return { $or: or }
+}
 
 export const search = async ({
   searchString,
@@ -28,11 +32,16 @@ export const search = async ({
   limit = DEFAULT_LIMIT,
 }: SearchFilters) => {
   const regex = new RegExp(escapeRegex(searchString), "i")
-  const query = buildAliasedQuery(regex)
 
   if (itemType === "wrestler") {
-    return Wrestler.find(query).sort({ displayName: 1 }).limit(limit).exec()
+    return Wrestler.find(buildAliasedQuery(regex, false))
+      .sort({ displayName: 1 })
+      .limit(limit)
+      .exec()
   }
 
-  return Promotion.find(query).sort({ displayName: 1 }).limit(limit).exec()
+  return Promotion.find(buildAliasedQuery(regex, true))
+    .sort({ displayName: 1 })
+    .limit(limit)
+    .exec()
 }
