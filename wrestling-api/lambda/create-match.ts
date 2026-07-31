@@ -65,8 +65,8 @@ const buildInput = (body: any): CreateMatchInput | { error: string } => {
   if (typeof body.overallMatchRating !== "number") {
     return { error: "overallMatchRating is required (number)" }
   }
-  if (!Array.isArray(body.participants) || body.participants.length === 0) {
-    return { error: "participants must be a non-empty array" }
+  if (!Array.isArray(body.participants) || body.participants.length < 2) {
+    return { error: "participants must have at least 2 entries" }
   }
 
   for (let i = 0; i < body.participants.length; i++) {

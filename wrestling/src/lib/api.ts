@@ -115,3 +115,78 @@ export const createWrestler = async (
   )
   return data
 }
+
+// --- Matches ---
+
+export const OVERALL_MATCH_RATING_VALUES = [
+  1, 2, 3, 4, 4.25, 4.5, 4.75, 5,
+] as const
+
+export interface MatchParticipant {
+  wrestlerId: string
+  displayName: string
+  performanceRating: number | null
+}
+
+export interface Match {
+  _id: string
+  date: string
+  year: number
+  promotionId: string
+  promotionDisplayName: string
+  show: string
+  cardUrl?: string
+  participantsDisplay: string
+  matchTitle: string
+  extraInfo?: string
+  participantCount: number
+  participants: MatchParticipant[]
+  overallMatchRating: number
+}
+
+export interface CreateMatchParticipantInput {
+  wrestlerId: string
+  displayName: string
+  performanceRating?: number | null
+}
+
+export interface CreateMatchInput {
+  date: string
+  promotionId: string
+  promotionDisplayName: string
+  show: string
+  cardUrl?: string
+  participantsDisplay: string
+  matchTitle: string
+  extraInfo?: string
+  participants: CreateMatchParticipantInput[]
+  overallMatchRating: number
+}
+
+export interface CreateMatchResponse {
+  id: string
+  date: string
+  year: number
+  show: string
+  participantCount: number
+  message: string
+}
+
+// GET /matches is public; POST /match requires a Clerk JWT.
+
+export const getMatches = async (): Promise<ListResponse<Match>> => {
+  const { data } = await axios.get<ListResponse<Match>>(`${API_URL}/matches`)
+  return data
+}
+
+export const createMatch = async (
+  input: CreateMatchInput,
+  getToken: GetToken,
+): Promise<CreateMatchResponse> => {
+  const client = await createAuthenticatedClient(getToken)
+  const { data } = await client.post<CreateMatchResponse>(
+    `${API_URL}/match`,
+    input,
+  )
+  return data
+}
