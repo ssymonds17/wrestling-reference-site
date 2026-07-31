@@ -101,10 +101,10 @@ GOOD,3,1,bobbygenele1,07/05/1971,FFCP,Bobby Genele & Guy Renault vs. Michel Saul
 GOOD,3,1,guyrenault1,07/05/1971,FFCP,Bobby Genele & Guy Renault vs. Michel Saulnier & Pedro Cabrera,Best Two Out Of Three Falls Tag Team Match
 GOOD,3,1,michelsaulnier1,07/05/1971,FFCP,Bobby Genele & Guy Renault vs. Michel Saulnier & Pedro Cabrera,Best Two Out Of Three Falls Tag Team Match
 GOOD,3,1,pedrocabrera1,07/05/1971,FFCP,Bobby Genele & Guy Renault vs. Michel Saulnier & Pedro Cabrera,Best Two Out Of Three Falls Tag Team Match
-GOOD,3,1,davelarsen1,17/05/1971,FFCP,Batman & Paco Ramirez v.s Inca Wiracocha & Don Gonzalez,Tag Team Match
-NEUTRAL,2,0,pacoramirez1,17/05/1971,FFCP,Batman & Paco Ramirez v.s Inca Wiracocha & Don Gonzalez,Tag Team Match
-NEUTRAL,2,0,incawiracocha1,17/05/1971,FFCP,Batman & Paco Ramirez v.s Inca Wiracocha & Don Gonzalez,Tag Team Match
-GOOD,3,1,josegonzalez1,17/05/1971,FFCP,Batman & Paco Ramirez v.s Inca Wiracocha & Don Gonzalez,Tag Team Match
+GOOD,3,1,davelarsen1,17/05/1971,FFCP,Batman & Paco Ramirez vs. Inca Wiracocha & Don Gonzalez,Tag Team Match
+NEUTRAL,2,0,pacoramirez1,17/05/1971,FFCP,Batman & Paco Ramirez vs. Inca Wiracocha & Don Gonzalez,Tag Team Match
+NEUTRAL,2,0,incawiracocha1,17/05/1971,FFCP,Batman & Paco Ramirez vs. Inca Wiracocha & Don Gonzalez,Tag Team Match
+GOOD,3,1,josegonzalez1,17/05/1971,FFCP,Batman & Paco Ramirez vs. Inca Wiracocha & Don Gonzalez,Tag Team Match
 NEUTRAL,2,0,antonioinoki1,19/05/1971,JWA,Antonio Inoki vs. The Destroyer,World League 1971 Semi Final Match
 GOOD,3,1,destroyer1,19/05/1971,JWA,Antonio Inoki vs. The Destroyer,World League 1971 Semi Final Match
 NEUTRAL,2,0,abdullahthebutcher1,19/05/1971,JWA,Abdullah The Butcher vs. Giant Baba,World League 1971 Final Match
@@ -165,8 +165,8 @@ NEUTRAL,2,0,benjustice1,18/12/1971,BTW,Ben Justice & The Stomper vs. The Fabulou
 NEUTRAL,2,0,jerryvaliant1,18/12/1971,BTW,Ben Justice & The Stomper vs. The Fabulous Kangaroos (Al Costello & Don Kent),NWA World Tag Team Title Tournament Final Match
 NEUTRAL,2,0,alcostello1,18/12/1971,BTW,Ben Justice & The Stomper vs. The Fabulous Kangaroos (Al Costello & Don Kent),NWA World Tag Team Title Tournament Final Match
 NEUTRAL,2,0,donkent1,18/12/1971,BTW,Ben Justice & The Stomper vs. The Fabulous Kangaroos (Al Costello & Don Kent),NWA World Tag Team Title Tournament Final Match
-NEUTRAL,2,0,tonycharles1,05/01/1972,JP,Tony Charles vs Terry Rudge,Singles Match
-NEUTRAL,2,0,terryrudge1,05/01/1972,JP,Tony Charles vs Terry Rudge,Singles Match
+NEUTRAL,2,0,tonycharles1,05/01/1972,JP,Tony Charles vs. Terry Rudge,Singles Match
+NEUTRAL,2,0,terryrudge1,05/01/1972,JP,Tony Charles vs. Terry Rudge,Singles Match
 GOOD,3,1,steveveidor1,05/01/1972,JP,Steve Veidor vs. Pete Roberts,Singles Match
 GOOD,3,1,peteroberts1,05/01/1972,JP,Steve Veidor vs. Pete Roberts,Singles Match
 BAD,1,-2,johnnykwango1,05/01/1972,JP,Johnny Kwango vs. Al Dennison,Singles Match
@@ -415,7 +415,7 @@ POSITIVE,3,1,alansergeant1,08/11/1973,JP,Robby Baron vs. Alan Sergeant,Singles M
 POSITIVE,3,1,jackycorn1,09/11/1973,FFCP,Jacky Corn vs. Frank Malmoa,Singles Match
 NEUTRAL,2,0,frankmalmoa1,09/11/1973,FFCP,Jacky Corn vs. Frank Malmoa,Singles Match
 NEUTRAL,2,0,jumbotsuruta1,24/11/1973,AJPW,Jumbo Tsuruta vs. Mickey Doyle,Singles Match
-NEUTRAL,2,0,mickmcmanus1,24/11/1973,AJPW,Jumbo Tsuruta vs. Mickey Doyle,Singles Match
+NEUTRAL,2,0,mickeydoyle1,24/11/1973,AJPW,Jumbo Tsuruta vs. Mickey Doyle,Singles Match
 POSITIVE,3,1,brunosammartino1,24/11/1973,AJPW,Bruno Sammartino & Calypso Hurricane vs. Anton Geesink & Giant Baba,Best Two Out Of Three Falls Tag Team Match
 NEUTRAL,2,0,ciclonnegro1,24/11/1973,AJPW,Bruno Sammartino & Calypso Hurricane vs. Anton Geesink & Giant Baba,Best Two Out Of Three Falls Tag Team Match
 NEGATIVE,1,-2,antongeesink1,24/11/1973,AJPW,Bruno Sammartino & Calypso Hurricane vs. Anton Geesink & Giant Baba,Best Two Out Of Three Falls Tag Team Match
@@ -1629,8 +1629,8 @@ POSITIVE,3,1,rickmartel1,14/02/1981,WWF,Rick Martel & Tony Garea (c) vs. The Moo
 NEUTRAL,2,0,tonygarea1,14/02/1981,WWF,Rick Martel & Tony Garea (c) vs. The Moondogs (Moondog King & Moondog Rex),WWF Tag Team Title Texas Death Match (Special Referee: Gorilla Monsoon)
 NEGATIVE,1,-2,edwhite1,14/02/1981,WWF,Rick Martel & Tony Garea (c) vs. The Moondogs (Moondog King & Moondog Rex),WWF Tag Team Title Texas Death Match (Special Referee: Gorilla Monsoon)
 NEGATIVE,1,-2,moondogrex1,14/02/1981,WWF,Rick Martel & Tony Garea (c) vs. The Moondogs (Moondog King & Moondog Rex),WWF Tag Team Title Texas Death Match (Special Referee: Gorilla Monsoon)
-NEUTRAL,2,0,jayyoungblood1,14/02/1981,PNW,Jay Youngblood  vs. Rip Oliver,Non Title Indian Strap Match
-NEUTRAL,2,0,ripoliver1,14/02/1981,PNW,Jay Youngblood  vs. Rip Oliver,Non Title Indian Strap Match
+NEUTRAL,2,0,jayyoungblood1,14/02/1981,PNW,Jay Youngblood vs. Rip Oliver,Non Title Indian Strap Match
+NEUTRAL,2,0,ripoliver1,14/02/1981,PNW,Jay Youngblood vs. Rip Oliver,Non Title Indian Strap Match
 NEUTRAL,2,0,harleyrace1,15/02/1981,AJPW,Harley Race (c) vs. Giant Baba,NWA World Heavyweight Title Best Two Out Of Three Falls Match
 NEUTRAL,2,0,giantbaba1,15/02/1981,AJPW,Harley Race (c) vs. Giant Baba,NWA World Heavyweight Title Best Two Out Of Three Falls Match
 NEUTRAL,2,0,pedromorales1,16/02/1981,WWF,Pedro Morales (c) vs. Sgt. Slaughter,WWF Intercontinental Title Match
