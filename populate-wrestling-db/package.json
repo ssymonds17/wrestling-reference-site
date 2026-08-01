@@ -9,6 +9,7 @@
     "populate:promotions": "node populatePromotions.mjs",
     "populate:wrestlers": "node populateWrestlers.mjs",
     "populate:matches": "node populateMatches.mjs",
+    "assign:tiers": "node assignTiersFromCsv.mjs",
     "recompute:years": "node recomputeWrestlerYears.mjs",
     "recompute:careers": "node recomputeCareerScores.mjs"
   },
