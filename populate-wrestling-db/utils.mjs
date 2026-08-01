@@ -4,9 +4,14 @@ import axios from "axios"
 import "dotenv/config"
 
 export const API_BASE_URL = process.env.API_BASE_URL
+export const INGESTION_TOKEN = process.env.INGESTION_TOKEN
 
 if (!API_BASE_URL) {
   throw new Error("API_BASE_URL environment variable is required (set it in .env)")
+}
+
+if (!INGESTION_TOKEN) {
+  throw new Error("INGESTION_TOKEN environment variable is required (set it in .env)")
 }
 
 export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -31,4 +36,7 @@ export const splitNames = (nameString) => {
 
 export const client = axios.create({
   baseURL: API_BASE_URL,
+  headers: {
+    Authorization: `Bearer ${INGESTION_TOKEN}`,
+  },
 })

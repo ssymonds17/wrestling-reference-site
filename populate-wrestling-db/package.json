@@ -4,6 +4,8 @@
   "description": "Ingest wrestling data (promotions, wrestlers, matches) from CSV via the wrestling-api endpoints",
   "type": "module",
   "scripts": {
+    "consolidate": "node consolidate-matches.mjs",
+    "teardown": "node teardown.mjs",
     "populate:promotions": "node populatePromotions.mjs",
     "populate:wrestlers": "node populateWrestlers.mjs",
     "populate:matches": "node populateMatches.mjs",
