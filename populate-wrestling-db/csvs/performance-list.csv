@@ -63,8 +63,8 @@ GOOD,3,1,bertmychel1,12/12/1970,FFCP,Gilbert LeDuc vs. Bert Mychel,Singles Match
 NEUTRAL,2,0,crusherverdu1,12/12/1970,FFCP,Der Henker vs .Jacky Corn,Singles Match
 GOOD,3,1,gilbertleduc1,12/12/1970,FFCP,Gilbert LeDuc vs. Bert Mychel,Singles Match
 NEUTRAL,2,0,jackycorn1,12/12/1970,FFCP,Der Henker vs .Jacky Corn,Singles Match
-GREAT,4,2.5,genekiniski1,18/12/1970,JWA,Gene Kiniski (c) vs. Giant Baba,NWA International Heavyweight Title Best Two Out Of Three Falls Match
-NEUTRAL,2,0,giantbaba1,18/12/1970,JWA,Gene Kiniski (c) vs. Giant Baba,NWA International Heavyweight Title Best Two Out Of Three Falls Match
+GREAT,4,2.5,genekiniski1,18/12/1970,NWA Hollywood,Gene Kiniski (c) vs. Giant Baba,NWA International Heavyweight Title Best Two Out Of Three Falls Match
+NEUTRAL,2,0,giantbaba1,18/12/1970,NWA Hollywood,Gene Kiniski (c) vs. Giant Baba,NWA International Heavyweight Title Best Two Out Of Three Falls Match
 NEUTRAL,2,0,mickmcmanus1,10/06/1970,JP,Mick McManus vs. Johnny Saint,Singles Match
 GOOD,3,1,johnnysaint1,10/06/1970,JP,Mick McManus vs. Johnny Saint,Singles Match
 GOOD,3,1,walterbordes1,02/01/1971,FFCP,Rene Chemoul & Walter Bordes vs. Golden Falcons (Golden Falcon #1 & Golden Falcon #2),Best Two Out Of Three Falls Tag Team Match
@@ -1166,8 +1166,8 @@ NEGATIVE,1,-2,ironsheik1,06/09/1980,MLW,Great Hussein Arab & Greg Valentine vs. 
 POSITIVE,3,1,gregvalentine1,06/09/1980,MLW,Great Hussein Arab & Greg Valentine vs. Angelo Mosca & Ric Flair,Tag Team Match
 NEGATIVE,1,-2,angelamosca1,06/09/1980,MLW,Great Hussein Arab & Greg Valentine vs. Angelo Mosca & Ric Flair,Tag Team Match
 POSITIVE,3,1,ricflair1,06/09/1980,MLW,Great Hussein Arab & Greg Valentine vs. Angelo Mosca & Ric Flair,Tag Team Match
-NEGATIVE,1,-2,dickthebruiser1,06/09/1980,WWA-IN,Dick The Bruiser (c) vs. Nick Bockwinkel,WWA World Heavyweight Title Match
-POSITIVE,3,1,nickbockwinkel1,06/09/1980,WWA-IN,Dick The Bruiser (c) vs. Nick Bockwinkel,WWA World Heavyweight Title Match
+NEGATIVE,1,-2,dickthebruiser1,06/09/1980,WWA,Dick The Bruiser (c) vs. Nick Bockwinkel,WWA World Heavyweight Title Match
+POSITIVE,3,1,nickbockwinkel1,06/09/1980,WWA,Dick The Bruiser (c) vs. Nick Bockwinkel,WWA World Heavyweight Title Match
 NEUTRAL,2,0,giantbaba1,09/09/1980,AJPW,Giant Baba (c) vs. Harley Race,Singles Match
 NEUTRAL,2,0,harleyrace1,09/09/1980,AJPW,Giant Baba (c) vs. Harley Race,Singles Match
 GREAT,4,2.5,andrethegiant1,09/09/1980,EMLL,"Andre The Giant & Cien Caras vs. Alfonso Dantes, Herodes & Sangre Chicana",Three On Two Handicap Best Two Out Of Three Falls Match
