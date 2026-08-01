@@ -3,8 +3,8 @@ GOOD,3,1,guymercier1,01/01/1970,FFCP,Jacky Corn & Guy Mercier vs. Ted Lamarre & 
 GOOD,3,1,jackycorn1,01/01/1970,FFCP,Jacky Corn & Guy Mercier vs. Ted Lamarre & Jo Marsalo,Best Two Out Of Three Falls Tag Team Match
 NEUTRAL,2,0,jomarsalo1,01/01/1970,FFCP,Jacky Corn & Guy Mercier vs. Ted Lamarre & Jo Marsalo,Best Two Out Of Three Falls Tag Team Match
 GOOD,3,1,tedlamarre1,01/01/1970,FFCP,Jacky Corn & Guy Mercier vs. Ted Lamarre & Jo Marsalo,Best Two Out Of Three Falls Tag Team Match
-NEUTRAL,2,0,charlyverhulst1,24/01/1970,FFCP,Guy Mercier vs. Allan Le Foudre,Singles Match
-NEUTRAL,2,0,guymercier1,24/01/1970,FFCP,Guy Mercier vs. Allan Le Foudre,Singles Match
+NEUTRAL,2,0,charlyverhulst1,24/01/1970,FFCP,Guy Mercier vs. Allan La Foudre,Singles Match
+NEUTRAL,2,0,guymercier1,24/01/1970,FFCP,Guy Mercier vs. Allan La Foudre,Singles Match
 NEUTRAL,2,0,gabrielcalderon1,21/02/1970,FFCP,Rene Lasartesse vs. Gaby Calderon,Singles Match
 GOOD,3,1,renelasartesse1,21/02/1970,FFCP,Rene Lasartesse vs. Gaby Calderon,Singles Match
 GOOD,3,1,antonioinoki1,03/03/1970,JWA,"Antonio Inoki, Kintaro Oki & Mitsu Hirai vs. Jim Osborne, Phil Robley & Prince Iaukea",Best Two Out Of Three Falls Six Man Tag Team Match
@@ -67,10 +67,10 @@ GREAT,4,2.5,genekiniski1,18/12/1970,NWA Hollywood,Gene Kiniski (c) vs. Giant Bab
 NEUTRAL,2,0,giantbaba1,18/12/1970,NWA Hollywood,Gene Kiniski (c) vs. Giant Baba,NWA International Heavyweight Title Best Two Out Of Three Falls Match
 NEUTRAL,2,0,mickmcmanus1,10/06/1970,JP,Mick McManus vs. Johnny Saint,Singles Match
 GOOD,3,1,johnnysaint1,10/06/1970,JP,Mick McManus vs. Johnny Saint,Singles Match
-GOOD,3,1,walterbordes1,02/01/1971,FFCP,Rene Chemoul & Walter Bordes vs. Golden Falcons (Golden Falcon #1 & Golden Falcon #2),Best Two Out Of Three Falls Tag Team Match
-NEUTRAL,2,0,renebenchemoul1,02/01/1971,FFCP,Rene Chemoul & Walter Bordes vs. Golden Falcons (Golden Falcon #1 & Golden Falcon #2),Best Two Out Of Three Falls Tag Team Match
-NEUTRAL,2,0,goldenfalcon1,02/01/1971,FFCP,Rene Chemoul & Walter Bordes vs. Golden Falcons (Golden Falcon #1 & Golden Falcon #2),Best Two Out Of Three Falls Tag Team Match
-NEUTRAL,2,0,goldenfalcon2,02/01/1971,FFCP,Rene Chemoul & Walter Bordes vs. Golden Falcons (Golden Falcon #1 & Golden Falcon #2),Best Two Out Of Three Falls Tag Team Match
+GOOD,3,1,walterbordes1,02/01/1971,FFCP,Rene Ben Chemoul & Walter Bordes vs. Golden Falcons (Golden Falcon #1 & Golden Falcon #2),Best Two Out Of Three Falls Tag Team Match
+NEUTRAL,2,0,renebenchemoul1,02/01/1971,FFCP,Rene Ben Chemoul & Walter Bordes vs. Golden Falcons (Golden Falcon #1 & Golden Falcon #2),Best Two Out Of Three Falls Tag Team Match
+NEUTRAL,2,0,goldenfalcon1,02/01/1971,FFCP,Rene Ben Chemoul & Walter Bordes vs. Golden Falcons (Golden Falcon #1 & Golden Falcon #2),Best Two Out Of Three Falls Tag Team Match
+NEUTRAL,2,0,goldenfalcon2,02/01/1971,FFCP,Rene Ben Chemoul & Walter Bordes vs. Golden Falcons (Golden Falcon #1 & Golden Falcon #2),Best Two Out Of Three Falls Tag Team Match
 NEUTRAL,2,0,gilbertcesca1,25/01/1971,FFCP,Gilbert Cesca & Bruno Asquini vs. Les Blousons Noirs (Marcel Manneveau & Claude Gessat),Best Two Out Of Three Falls Tag Team Match
 NEUTRAL,2,0,brunoasquini1,25/01/1971,FFCP,Gilbert Cesca & Bruno Asquini vs. Les Blousons Noirs (Marcel Manneveau & Claude Gessat),Best Two Out Of Three Falls Tag Team Match
 GOOD,3,1,marcelmanneveau1,25/01/1971,FFCP,Gilbert Cesca & Bruno Asquini vs. Les Blousons Noirs (Marcel Manneveau & Claude Gessat),Best Two Out Of Three Falls Tag Team Match
@@ -157,10 +157,10 @@ GOOD,3,1,dickmurdoch1,12/12/1971,JWA,Dick Murdoch & Dory Funk Jr. vs. Michiaki Y
 GOOD,3,1,doryfunkjr1,12/12/1971,JWA,Dick Murdoch & Dory Funk Jr. vs. Michiaki Yoshimura & Seiji Sakaguchi,All Asia Tag Team Title Best Two Out Of Three Falls Match
 NEUTRAL,2,0,michiakiyoshimura1,12/12/1971,JWA,Dick Murdoch & Dory Funk Jr. vs. Michiaki Yoshimura & Seiji Sakaguchi,All Asia Tag Team Title Best Two Out Of Three Falls Match
 GOOD,3,1,seijisakaguchi1,12/12/1971,JWA,Dick Murdoch & Dory Funk Jr. vs. Michiaki Yoshimura & Seiji Sakaguchi,All Asia Tag Team Title Best Two Out Of Three Falls Match
-GREAT,4,2.5,lepetitprince1,14/12/1971,FFCP,Petit Prince & Michel Saulnier vs. Bobby Genele & Guy Renault,Tag Team Match
-NEUTRAL,2,0,michelsaulnier1,14/12/1971,FFCP,Petit Prince & Michel Saulnier vs. Bobby Genele & Guy Renault,Tag Team Match
-GOOD,3,1,bobbygenele1,14/12/1971,FFCP,Petit Prince & Michel Saulnier vs. Bobby Genele & Guy Renault,Tag Team Match
-GOOD,3,1,guyrenault1,14/12/1971,FFCP,Petit Prince & Michel Saulnier vs. Bobby Genele & Guy Renault,Tag Team Match
+GREAT,4,2.5,lepetitprince1,14/12/1971,FFCP,Le Petit Prince & Michel Saulnier vs. Bobby Genele & Guy Renault,Tag Team Match
+NEUTRAL,2,0,michelsaulnier1,14/12/1971,FFCP,Le Petit Prince & Michel Saulnier vs. Bobby Genele & Guy Renault,Tag Team Match
+GOOD,3,1,bobbygenele1,14/12/1971,FFCP,Le Petit Prince & Michel Saulnier vs. Bobby Genele & Guy Renault,Tag Team Match
+GOOD,3,1,guyrenault1,14/12/1971,FFCP,Le Petit Prince & Michel Saulnier vs. Bobby Genele & Guy Renault,Tag Team Match
 NEUTRAL,2,0,benjustice1,18/12/1971,BTW,Ben Justice & The Stomper vs. The Fabulous Kangaroos (Al Costello & Don Kent),NWA World Tag Team Title Tournament Final Match
 NEUTRAL,2,0,jerryvaliant1,18/12/1971,BTW,Ben Justice & The Stomper vs. The Fabulous Kangaroos (Al Costello & Don Kent),NWA World Tag Team Title Tournament Final Match
 NEUTRAL,2,0,alcostello1,18/12/1971,BTW,Ben Justice & The Stomper vs. The Fabulous Kangaroos (Al Costello & Don Kent),NWA World Tag Team Title Tournament Final Match
@@ -209,10 +209,10 @@ GOOD,3,1,mickmcmichael1,22/03/1972,JP,Mick McMichael vs. Bobby Barnes,Singles Ma
 GOOD,3,1,bobbybarnes1,22/03/1972,JP,Mick McMichael vs. Bobby Barnes,Singles Match
 NEUTRAL,2,0,abdulkhan1,27/03/1972,FFCP,Abdul Khan vs. Batman,Singles Match
 GOOD,3,1,davelarsen1,27/03/1972,FFCP,Abdul Khan vs. Batman,Singles Match
-GOOD,3,1,jeancorne1,27/03/1972,FFCP,Jean Corne & Michele Falempin vs. Inca Viracocha & Jose Gonzalez,Best Two Out Of Three Falls Tag Team Match
-GOOD,3,1,michelfalempin1,27/03/1972,FFCP,Jean Corne & Michele Falempin vs. Inca Viracocha & Jose Gonzalez,Best Two Out Of Three Falls Tag Team Match
-NEUTRAL,2,0,incawiracocha1,27/03/1972,FFCP,Jean Corne & Michele Falempin vs. Inca Viracocha & Jose Gonzalez,Best Two Out Of Three Falls Tag Team Match
-GREAT,4,2.5,josegonzalez1,27/03/1972,FFCP,Jean Corne & Michele Falempin vs. Inca Viracocha & Jose Gonzalez,Best Two Out Of Three Falls Tag Team Match
+GOOD,3,1,jeancorne1,27/03/1972,FFCP,Jean Corne & Michel Falempin vs. Inca Viracocha & Jose Gonzalez,Best Two Out Of Three Falls Tag Team Match
+GOOD,3,1,michelfalempin1,27/03/1972,FFCP,Jean Corne & Michel Falempin vs. Inca Viracocha & Jose Gonzalez,Best Two Out Of Three Falls Tag Team Match
+NEUTRAL,2,0,incawiracocha1,27/03/1972,FFCP,Jean Corne & Michel Falempin vs. Inca Viracocha & Jose Gonzalez,Best Two Out Of Three Falls Tag Team Match
+GREAT,4,2.5,josegonzalez1,27/03/1972,FFCP,Jean Corne & Michel Falempin vs. Inca Viracocha & Jose Gonzalez,Best Two Out Of Three Falls Tag Team Match
 NEUTRAL,2,0,tiborszakacs1,19/04/1972,JP,Tibor Szakacs vs. Jack Fallon,Singles Match
 NEUTRAL,2,0,jackfallon1,19/04/1972,JP,Tibor Szakacs vs. Jack Fallon,Singles Match
 NEUTRAL,2,0,martyjones1,19/04/1972,JP,The Hornets (Marty Jones & Dane Curtis) vs. The Danger Men (Colin Joynson & Steve Haggerty),Tag Team Match
@@ -430,8 +430,8 @@ POSITIVE,3,1,stevegrey1,13/12/1973,JP,Steve Grey vs. Jon Cortez,Singles Match
 GREAT,4,2.5,joncortez1,13/12/1973,JP,Steve Grey vs. Jon Cortez,Singles Match
 POSITIVE,3,1,adrianstreet1,13/12/1973,JP,Adrian Street vs. Mick McMichael,Singles Match
 POSITIVE,3,1,mickmcmichael1,13/12/1973,JP,Adrian Street vs. Mick McMichael,Singles Match
-POSITIVE,3,1,alansergeant1,13/12/1973,JP,Alan Sarjeant vs. Eddie Capelli,Singles Match
-POSITIVE,3,1,eddiecapelli1,13/12/1973,JP,Alan Sarjeant vs. Eddie Capelli,Singles Match
+POSITIVE,3,1,alansergeant1,13/12/1973,JP,Alan Sergeant vs. Eddie Capelli,Singles Match
+POSITIVE,3,1,eddiecapelli1,13/12/1973,JP,Alan Sergeant vs. Eddie Capelli,Singles Match
 NEUTRAL,2,0,joselothario1,18/01/1974,Houston,Jose Lothario (c) vs. Great Mephisto,NWA Texas Brass Knuckles Title Best Two Out Of Three Falls Match
 NEUTRAL,2,0,greatmephisto1,18/01/1974,Houston,Jose Lothario (c) vs. Great Mephisto,NWA Texas Brass Knuckles Title Best Two Out Of Three Falls Match
 NEUTRAL,2,0,strongkobayashi1,19/01/1974,IWE,Strong Kobayashi (c) vs. Bill Watts,IWA World Heavyweight Title Best Two Out Of Three Falls Match
@@ -478,8 +478,8 @@ POSITIVE,3,1,andrethegiant1,19/03/1974,NJPW,Andre The Giant vs. Seiji Sakaguchi,
 POSITIVE,3,1,seijisakaguchi1,19/03/1974,NJPW,Andre The Giant vs. Seiji Sakaguchi,Singles Match
 POSITIVE,3,1,antonioinoki1,19/03/1974,NJPW,Antonio Inoki (c) vs. Strong Kobayashi,NWF Heavyweight Title Match
 NEUTRAL,2,0,strongkobayashi1,19/03/1974,NJPW,Antonio Inoki (c) vs. Strong Kobayashi,NWF Heavyweight Title Match
-NEUTRAL,2,0,bobbygenele1,21/03/1974,FFCP,Bob Genere vs. Pedro Cabrera,Singles Match
-NEUTRAL,2,0,pedrocabrera1,21/03/1974,FFCP,Bob Genere vs. Pedro Cabrera,Singles Match
+NEUTRAL,2,0,bobbygenele1,21/03/1974,FFCP,Bobby Genele vs. Pedro Cabrera,Singles Match
+NEUTRAL,2,0,pedrocabrera1,21/03/1974,FFCP,Bobby Genele vs. Pedro Cabrera,Singles Match
 POSITIVE,3,1,guymercier1,21/03/1974,FFCP,Guy Mercier & Gerard Taysse vs. Jose Gonzalez & Guy Renault,Best Two Out Of Three Falls Tag Team Match
 NEUTRAL,2,0,gerardtaysse1,21/03/1974,FFCP,Guy Mercier & Gerard Taysse vs. Jose Gonzalez & Guy Renault,Best Two Out Of Three Falls Tag Team Match
 POSITIVE,3,1,josegonzalez1,21/03/1974,FFCP,Guy Mercier & Gerard Taysse vs. Jose Gonzalez & Guy Renault,Best Two Out Of Three Falls Tag Team Match
@@ -620,8 +620,8 @@ NEUTRAL,2,0,steveveidor1,20/11/1974,JP,Steve Veidor vs. Honeyboy Zimba,Singles M
 NEUTRAL,2,0,honeyboyzimba1,20/11/1974,JP,Steve Veidor vs. Honeyboy Zimba,Singles Match
 NEUTRAL,2,0,peteroberts1,20/11/1974,JP,Pete Roberts vs. Amet Chong,Singles Match
 POSITIVE,3,1,ametchong1,20/11/1974,JP,Pete Roberts vs. Amet Chong,Singles Match
-POSITIVE,3,1,mickmcmanus1,20/11/1974,JP,Mick McManus vs. Alan Sarjeant,Singles Match
-POSITIVE,3,1,alansergeant1,20/11/1974,JP,Mick McManus vs. Alan Sarjeant,Singles Match
+POSITIVE,3,1,mickmcmanus1,20/11/1974,JP,Mick McManus vs. Alan Sergeant,Singles Match
+POSITIVE,3,1,alansergeant1,20/11/1974,JP,Mick McManus vs. Alan Sergeant,Singles Match
 NEUTRAL,2,0,mikemarino1,20/11/1974,JP,Mike Marino vs. John Kowalski,Singles Match
 POSITIVE,3,1,johnkowalski1,20/11/1974,JP,Mike Marino vs. John Kowalski,Singles Match
 POSITIVE,3,1,leskellett1,20/11/1974,JP,Les Kellett vs. Steve Haggerty,Singles Match
@@ -1164,7 +1164,7 @@ NEUTRAL,2,0,stanhansen1,05/09/1980,NJPW,"Antonio Inoki, Kengo Kimura & Tatsumi F
 NEUTRAL,2,0,tonyrocco1,05/09/1980,NJPW,"Antonio Inoki, Kengo Kimura & Tatsumi Fujinami vs. Pete Roberts, Stan Hansen & Tony Rocco",Best Two Out Of Three Falls Six Man Tag Team Match
 NEGATIVE,1,-2,ironsheik1,06/09/1980,MLW,Great Hussein Arab & Greg Valentine vs. Angelo Mosca & Ric Flair,Tag Team Match
 POSITIVE,3,1,gregvalentine1,06/09/1980,MLW,Great Hussein Arab & Greg Valentine vs. Angelo Mosca & Ric Flair,Tag Team Match
-NEGATIVE,1,-2,angelamosca1,06/09/1980,MLW,Great Hussein Arab & Greg Valentine vs. Angelo Mosca & Ric Flair,Tag Team Match
+NEGATIVE,1,-2,angelomosca1,06/09/1980,MLW,Great Hussein Arab & Greg Valentine vs. Angelo Mosca & Ric Flair,Tag Team Match
 POSITIVE,3,1,ricflair1,06/09/1980,MLW,Great Hussein Arab & Greg Valentine vs. Angelo Mosca & Ric Flair,Tag Team Match
 NEGATIVE,1,-2,dickthebruiser1,06/09/1980,WWA,Dick The Bruiser (c) vs. Nick Bockwinkel,WWA World Heavyweight Title Match
 POSITIVE,3,1,nickbockwinkel1,06/09/1980,WWA,Dick The Bruiser (c) vs. Nick Bockwinkel,WWA World Heavyweight Title Match
@@ -1313,8 +1313,8 @@ NEUTRAL,2,0,antonioinoki1,03/11/1980,NJPW,Antonio Inoki (c) vs. Hulk Hogan,NWF H
 NEUTRAL,2,0,hulkhogan1,03/11/1980,NJPW,Antonio Inoki (c) vs. Hulk Hogan,NWF Heavyweight Title Match
 NEUTRAL,2,0,terryfunk1,04/11/1980,AJPW,Terry Funk vs. The Asteroid,Singles Match
 NEUTRAL,2,0,scottirwin1,04/11/1980,AJPW,Terry Funk vs. The Asteroid,Singles Match
-NEUTRAL,2,0,dumpmatsumoto1,05/11/1980,AJW,Kaoru Mastumoto vs. Kazue Sakamoto,Rookie Tournament Match
-NEUTRAL,2,0,kazuesakamoto1,05/11/1980,AJW,Kaoru Mastumoto vs. Kazue Sakamoto,Rookie Tournament Match
+NEUTRAL,2,0,dumpmatsumoto1,05/11/1980,AJW,Kaoru Matsumoto vs. Kazue Sakamoto,Rookie Tournament Match
+NEUTRAL,2,0,kazuesakamoto1,05/11/1980,AJW,Kaoru Matsumoto vs. Kazue Sakamoto,Rookie Tournament Match
 NEUTRAL,2,0,lionessasuka1,05/11/1980,AJW,Tomoko Kitamura vs. Hiroe Ito,Singles Match
 NEUTRAL,2,0,hiroeito1,05/11/1980,AJW,Tomoko Kitamura vs. Hiroe Ito,Singles Match
 NEGATIVE,1,-2,yumiikeshita1,05/11/1980,AJW,Yumi Ikeshita vs. Nancy Kumi,Fuji TV Cup WWWA World Single Title Tournament Match
@@ -1334,7 +1334,7 @@ NEUTRAL,2,0,rikichoshu1,06/11/1980,NJPW,Hulk Hogan & Paul Orndorff vs. Antonio I
 NEUTRAL,2,0,tatsumifujinami1,06/11/1980,NJPW,Tatsumi Fujinami (c) vs. Steve Keirn,WWF Junior Heavyweight Title Match
 NEUTRAL,2,0,stevekeirn1,06/11/1980,NJPW,Tatsumi Fujinami (c) vs. Steve Keirn,WWF Junior Heavyweight Title Match
 NEUTRAL,2,0,andrethegiant1,06/11/1980,AWA,Andre The Giant & Angelo Mosca vs. Jerry Blackwell & John Studd,Tag Team Match
-NEGATIVE,1,-2,angelamosca1,06/11/1980,AWA,Andre The Giant & Angelo Mosca vs. Jerry Blackwell & John Studd,Tag Team Match
+NEGATIVE,1,-2,angelomosca1,06/11/1980,AWA,Andre The Giant & Angelo Mosca vs. Jerry Blackwell & John Studd,Tag Team Match
 NEGATIVE,1,-2,jerryblackwell1,06/11/1980,AWA,Andre The Giant & Angelo Mosca vs. Jerry Blackwell & John Studd,Tag Team Match
 NEGATIVE,1,-2,bigjohnstudd1,06/11/1980,AWA,Andre The Giant & Angelo Mosca vs. Jerry Blackwell & John Studd,Tag Team Match
 POSITIVE,3,1,brunosammartino1,08/11/1980,WWF,Bruno Sammartino vs. Ken Patera,Singles Match
@@ -1803,7 +1803,7 @@ POSITIVE,3,1,roddypiper1,04/05/1981,MLW,Jimmy Snuka & Roddy Piper vs. Dewey Robe
 NEUTRAL,2,0,missinglink1,04/05/1981,MLW,Jimmy Snuka & Roddy Piper vs. Dewey Robertson & Ric Flair,No Disqualification Tag Team Match
 POSITIVE,3,1,ricflair1,04/05/1981,MLW,Jimmy Snuka & Roddy Piper vs. Dewey Robertson & Ric Flair,No Disqualification Tag Team Match
 NEUTRAL,2,0,bobbacklund1,04/05/1981,WWF,Bob Backlund (c) vs. Angelo Mosca,WWF Heavyweight Title Match
-NEUTRAL,2,0,angelamosca1,04/05/1981,WWF,Bob Backlund (c) vs. Angelo Mosca,WWF Heavyweight Title Match
+NEUTRAL,2,0,angelomosca1,04/05/1981,WWF,Bob Backlund (c) vs. Angelo Mosca,WWF Heavyweight Title Match
 GREAT,4,2.5,patpatterson1,04/05/1981,WWF,Pat Patterson vs. Sgt. Slaughter,Alley Street Fight
 OUTSTANDING,5,4,sgtslaughter1,04/05/1981,WWF,Pat Patterson vs. Sgt. Slaughter,Alley Street Fight
 NEGATIVE,1,-2,gorillamonsoon1,04/05/1981,WWF,"Gorilla Monsoon, Rick Martel & Tony Garea vs. Captain Lou Albano, Moondog Rex & Stan Hansen",Best Two Out Of Three Falls Six Man Tag Team Match
@@ -1917,7 +1917,7 @@ POSITIVE,3,1,rickmartel1,08/06/1981,WWF,The Magnificent Muraco vs. Rick Martel,S
 NEGATIVE,1,-2,dustyrhodes1,08/06/1981,WWF,Dusty Rhodes vs. Killer Khan,Singles Match
 NEGATIVE,1,-2,killerkhan1,08/06/1981,WWF,Dusty Rhodes vs. Killer Khan,Singles Match
 NEUTRAL,2,0,bobbacklund1,08/06/1981,WWF,Bob Backlund (c) vs. Angelo Mosca,WWF Heavyweight Title Match
-NEUTRAL,2,0,angelamosca1,08/06/1981,WWF,Bob Backlund (c) vs. Angelo Mosca,WWF Heavyweight Title Match
+NEUTRAL,2,0,angelomosca1,08/06/1981,WWF,Bob Backlund (c) vs. Angelo Mosca,WWF Heavyweight Title Match
 NEUTRAL,2,0,tatsumifujinami1,08/06/1981,WWF,Tatsumi Fujinami & Yoshiaki Yatsu vs. The Moondogs (Moondog Rex & Moondog Spot),Non Title Best Two Out Of Three Falls Tag Team Match
 NEUTRAL,2,0,yoshiakiyatsu1,08/06/1981,WWF,Tatsumi Fujinami & Yoshiaki Yatsu vs. The Moondogs (Moondog Rex & Moondog Spot),Non Title Best Two Out Of Three Falls Tag Team Match
 NEUTRAL,2,0,moondogrex1,08/06/1981,WWF,Tatsumi Fujinami & Yoshiaki Yatsu vs. The Moondogs (Moondog Rex & Moondog Spot),Non Title Best Two Out Of Three Falls Tag Team Match
@@ -1971,7 +1971,7 @@ POSITIVE,3,1,mightyinoue1,25/06/1981,IWE,Ashura Hara & Mighty Inoue (c) vs. Carl
 NEUTRAL,2,0,carlfergie1,25/06/1981,IWE,Ashura Hara & Mighty Inoue (c) vs. Carl Fergie & Gypsy Joe,IWA World Tag Team Title Match
 NEUTRAL,2,0,gypsyjoe1,25/06/1981,IWE,Ashura Hara & Mighty Inoue (c) vs. Carl Fergie & Gypsy Joe,IWA World Tag Team Title Match
 POSITIVE,3,1,bobbacklund1,27/06/1981,WWF,Bob Backlund (c) vs. Angelo Mosca,WWF Heavyweight Title Match
-NEGATIVE,1,-2,angelamosca1,27/06/1981,WWF,Bob Backlund (c) vs. Angelo Mosca,WWF Heavyweight Title Match
+NEGATIVE,1,-2,angelomosca1,27/06/1981,WWF,Bob Backlund (c) vs. Angelo Mosca,WWF Heavyweight Title Match
 POSITIVE,3,1,andrethegiant1,27/06/1981,WWF,"Andre The Giant, Rick Martel & Tony Garea vs. Captain Lou Albano & The Moondogs (Moondog Rex & Moondog Spot)",Best Two Out Of Three Falls Six Man Tag Team Match
 POSITIVE,3,1,rickmartel1,27/06/1981,WWF,"Andre The Giant, Rick Martel & Tony Garea vs. Captain Lou Albano & The Moondogs (Moondog Rex & Moondog Spot)",Best Two Out Of Three Falls Six Man Tag Team Match
 NEUTRAL,2,0,tonygarea1,27/06/1981,WWF,"Andre The Giant, Rick Martel & Tony Garea vs. Captain Lou Albano & The Moondogs (Moondog Rex & Moondog Spot)",Best Two Out Of Three Falls Six Man Tag Team Match
@@ -2067,7 +2067,7 @@ POSITIVE,3,1,reynagallegos1,01/08/1981,AJW,Yukari Omori & Tomoko Kitamura vs. La
 GREAT,4,2.5,patpatterson1,01/08/1981,WWF,Pat Patterson vs. Sgt. Slaughter,Alley Fight
 GREAT,4,2.5,sgtslaughter1,01/08/1981,WWF,Pat Patterson vs. Sgt. Slaughter,Alley Fight
 NEUTRAL,2,0,bobbacklund1,01/08/1981,WWF,Bob Backlund (c) vs. Angelo Mosca,WWF Heavyweight Title Match
-NEUTRAL,2,0,angelamosca1,01/08/1981,WWF,Bob Backlund (c) vs. Angelo Mosca,WWF Heavyweight Title Match
+NEUTRAL,2,0,angelomosca1,01/08/1981,WWF,Bob Backlund (c) vs. Angelo Mosca,WWF Heavyweight Title Match
 POSITIVE,3,1,billdundee1,01/08/1981,CWA,Bill Dundee & Jerry Lawler (c) vs. Mr. Fuchi & Mr. Onita,AWA Southern Tag Team Title Match
 NEUTRAL,2,0,jerrylawler1,01/08/1981,CWA,Bill Dundee & Jerry Lawler (c) vs. Mr. Fuchi & Mr. Onita,AWA Southern Tag Team Title Match
 NEUTRAL,2,0,masanobufuchi1,01/08/1981,CWA,Bill Dundee & Jerry Lawler (c) vs. Mr. Fuchi & Mr. Onita,AWA Southern Tag Team Title Match
