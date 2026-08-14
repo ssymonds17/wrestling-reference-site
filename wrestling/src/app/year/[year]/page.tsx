@@ -142,9 +142,10 @@ export default function YearPage({ params }: YearPageProps) {
       </div>
 
       <p className="mt-3 text-xs text-gray-600">
-        Score is K &times; L &times; ln(1 + matches), where K is the weighted
-        average of performance ratings and L is the square root of the share of
-        ratings above 1.
+        Score combines the average performance score, the share of performances
+        rated above negative, and the number of matches, so a strong record over
+        many matches outranks the same record over a handful. Hover a score to
+        see its inputs.
       </p>
     </div>
   )

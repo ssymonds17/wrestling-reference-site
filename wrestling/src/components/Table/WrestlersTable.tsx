@@ -25,7 +25,7 @@ export default function WrestlersTable({
             <th className="px-3 py-2 text-left font-medium">Matches</th>
             <th className="px-3 py-2 text-left font-medium">Career score</th>
             <th className="px-3 py-2 text-left font-medium">Aliases</th>
-            <th className="px-3 py-2 text-left font-medium">Ratings</th>
+            <th className="px-3 py-2 text-left font-medium">Performances</th>
             <th className="px-3 py-2 text-right font-medium">Cagematch</th>
           </tr>
         </thead>

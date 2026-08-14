@@ -11,6 +11,7 @@ import {
   WrestlerYear,
 } from '@/lib/api'
 import { errorMessage, formatScore } from '@/lib/format'
+import { scoreBreakdown } from '@/lib/score'
 import MatchesTable from '@/components/Table/MatchesTable'
 import Pagination from '@/components/Pagination'
 import RatingDistribution from '@/components/Rating/RatingDistribution'
@@ -177,7 +178,7 @@ export default function WrestlerPage({ params }: WrestlerPageProps) {
 
       <section className="mt-8 grid gap-6 lg:grid-cols-[320px_1fr]">
         <div>
-          <h2 className="mb-3 text-xl font-semibold">Rating distribution</h2>
+          <h2 className="mb-3 text-xl font-semibold">Performances</h2>
           <div className="rounded border border-gray-800 bg-gray-900/50 p-4">
             <RatingDistribution counts={wrestler.ratingCounts} />
           </div>
@@ -190,9 +191,11 @@ export default function WrestlerPage({ params }: WrestlerPageProps) {
               <thead className="bg-gray-900 text-gray-400">
                 <tr>
                   <th className="px-3 py-2 text-left font-medium">Year</th>
-                  <th className="px-3 py-2 text-left font-medium">Matches</th>
                   <th className="px-3 py-2 text-left font-medium">Score</th>
-                  <th className="px-3 py-2 text-left font-medium">Ratings</th>
+                  <th className="px-3 py-2 text-left font-medium">Matches</th>
+                  <th className="px-3 py-2 text-left font-medium">
+                    Performances
+                  </th>
                   <th className="px-3 py-2 text-left font-medium">Tier</th>
                 </tr>
               </thead>
@@ -207,11 +210,16 @@ export default function WrestlerPage({ params }: WrestlerPageProps) {
                         {year.year}
                       </Link>
                     </td>
+                    <td className="px-3 py-2 tabular-nums text-gray-100">
+                      <span
+                        title={scoreBreakdown(year)}
+                        className="cursor-help decoration-gray-600 decoration-dotted underline-offset-4 hover:underline"
+                      >
+                        {formatScore(year.formulaScore)}
+                      </span>
+                    </td>
                     <td className="px-3 py-2 tabular-nums text-gray-300">
                       {year.matchCount}
-                    </td>
-                    <td className="px-3 py-2 tabular-nums text-gray-100">
-                      {formatScore(year.formulaScore)}
                     </td>
                     <td className="w-28 px-3 py-2">
                       <RatingDistribution

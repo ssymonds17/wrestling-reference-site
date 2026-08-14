@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { WrestlerYear } from '@/lib/api'
 import { formatScore } from '@/lib/format'
+import { scoreBreakdown } from '@/lib/score'
 import RatingDistribution from '@/components/Rating/RatingDistribution'
 import TierBadge from '@/components/TierBadge'
 
@@ -25,7 +26,7 @@ export default function YearStandingsTable({
   loading = false,
   renderActions,
 }: YearStandingsTableProps) {
-  const columnCount = renderActions ? 9 : 8
+  const columnCount = renderActions ? 7 : 6
 
   return (
     <div className="overflow-x-auto rounded border border-gray-800">
@@ -34,21 +35,9 @@ export default function YearStandingsTable({
           <tr>
             <th className="px-3 py-2 text-left font-medium">#</th>
             <th className="px-3 py-2 text-left font-medium">Wrestler</th>
-            <th className="px-3 py-2 text-left font-medium">Matches</th>
             <th className="px-3 py-2 text-left font-medium">Score</th>
-            <th
-              className="px-3 py-2 text-left font-medium"
-              title="Weighted average of performance ratings (K)"
-            >
-              K
-            </th>
-            <th
-              className="px-3 py-2 text-left font-medium"
-              title="Above-one factor: sqrt(non-negative ratings / matches) (L)"
-            >
-              L
-            </th>
-            <th className="px-3 py-2 text-left font-medium">Ratings</th>
+            <th className="px-3 py-2 text-left font-medium">Matches</th>
+            <th className="px-3 py-2 text-left font-medium">Performances</th>
             <th className="px-3 py-2 text-left font-medium">Tier</th>
             {renderActions && (
               <th className="px-3 py-2 text-right font-medium">Actions</th>
@@ -72,17 +61,18 @@ export default function YearStandingsTable({
                   {row.displayName}
                 </Link>
               </td>
+              {/* The formula's inputs live in the tooltip rather than their own
+                  columns — diagnostic detail, not something to scan a table by. */}
+              <td className="px-3 py-2 tabular-nums text-gray-100">
+                <span
+                  title={scoreBreakdown(row)}
+                  className="cursor-help decoration-gray-600 decoration-dotted underline-offset-4 hover:underline"
+                >
+                  {formatScore(row.formulaScore)}
+                </span>
+              </td>
               <td className="px-3 py-2 tabular-nums text-gray-300">
                 {row.matchCount}
-              </td>
-              <td className="px-3 py-2 tabular-nums text-gray-100">
-                {formatScore(row.formulaScore)}
-              </td>
-              <td className="px-3 py-2 tabular-nums text-gray-500">
-                {formatScore(row.weightedAverage)}
-              </td>
-              <td className="px-3 py-2 tabular-nums text-gray-500">
-                {formatScore(row.aboveOneFactor)}
               </td>
               <td className="w-32 px-3 py-2">
                 <RatingDistribution counts={row.ratingCounts} variant="strip" />
