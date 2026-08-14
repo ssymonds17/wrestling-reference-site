@@ -12,13 +12,48 @@ const toObjectId = (
 ): mongoose.Types.ObjectId =>
   typeof id === "string" ? new mongoose.Types.ObjectId(id) : id
 
+export type MatchSortBy = "date" | "rating"
+export type MatchSortDir = "asc" | "desc"
+
 export interface MatchListFilters {
   year?: number
   promotionId?: string
   wrestlerId?: string
   minOverallRating?: number
+  sortBy?: MatchSortBy
+  sortDir?: MatchSortDir
   limit?: number
   offset?: number
+}
+
+/**
+ * Both sorts fall back to date then _id so paging is stable — without a unique
+ * final tie-breaker, documents with equal sort values can shuffle between
+ * pages and a row may be seen twice or missed entirely.
+ *
+ * Sorting by a wrestler's own performanceRating is deliberately absent: it
+ * lives inside the participants array, so Mongo would sort by the array's
+ * max (desc) or min (asc) element rather than by the wrestler in question.
+ * That needs an aggregation — see Follow-ups in PLAN.md.
+ */
+const MATCH_SORT_ORDERS: Record<
+  MatchSortBy,
+  Record<MatchSortDir, Record<string, 1 | -1>>
+> = {
+  date: {
+    desc: { date: -1, _id: -1 },
+    asc: { date: 1, _id: 1 },
+  },
+  rating: {
+    desc: { overallMatchRating: -1, date: -1, _id: -1 },
+    asc: { overallMatchRating: 1, date: -1, _id: -1 },
+  },
+}
+
+export interface MatchListResult {
+  data: Awaited<ReturnType<typeof Match.find>>
+  /** Total matching the filter, ignoring limit/offset — powers real paging. */
+  total: number
 }
 
 export interface CreateMatchParticipantInput {
@@ -101,12 +136,21 @@ export const getMatches = async (filters?: MatchListFilters) => {
 
   const limit = filters?.limit ?? 100
   const offset = filters?.offset ?? 0
+  const sortBy = filters?.sortBy ?? "date"
+  const sortDir = filters?.sortDir ?? "desc"
 
-  return Match.find(query)
-    .sort({ date: -1, _id: -1 })
-    .skip(offset)
-    .limit(limit)
-    .exec()
+  // Counted against the same query so the total reflects the filters but not
+  // the page window.
+  const [data, total] = await Promise.all([
+    Match.find(query)
+      .sort(MATCH_SORT_ORDERS[sortBy][sortDir])
+      .skip(offset)
+      .limit(limit)
+      .exec(),
+    Match.countDocuments(query).exec(),
+  ])
+
+  return { data, total }
 }
 
 export const getMatchById = async (id: string) => {
