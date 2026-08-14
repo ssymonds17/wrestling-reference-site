@@ -1,9 +1,5 @@
-import { TIER_POINTS } from '@/lib/tiers'
-
 interface TierBadgeProps {
   tier: string | null | undefined
-  /** Append the tier's point value, e.g. "Great Worker · 10". */
-  withPoints?: boolean
 }
 
 /**
@@ -30,12 +26,10 @@ const TIER_CLASSES: Record<string, string> = {
 
 const FALLBACK_CLASSES = 'bg-gray-700/30 text-gray-300 border-gray-600'
 
-export default function TierBadge({ tier, withPoints = false }: TierBadgeProps) {
+export default function TierBadge({ tier }: TierBadgeProps) {
   if (!tier) {
     return <span className="text-gray-600 text-xs">no tier</span>
   }
-
-  const points = TIER_POINTS[tier]
 
   return (
     <span
@@ -44,9 +38,6 @@ export default function TierBadge({ tier, withPoints = false }: TierBadgeProps) 
       }`}
     >
       {tier}
-      {withPoints && points !== undefined && (
-        <span className="font-normal opacity-70"> &middot; {points}</span>
-      )}
     </span>
   )
 }

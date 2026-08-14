@@ -108,7 +108,7 @@ export default function YearStandingsTable({
                 <RatingDistribution counts={row.ratingCounts} variant="strip" />
               </td>
               <td className="px-3 py-2">
-                <TierBadge tier={row.yearTier} withPoints />
+                <TierBadge tier={row.yearTier} />
               </td>
               {renderActions && (
                 <td className="px-3 py-2 text-right">{renderActions(row)}</td>
