@@ -38,7 +38,9 @@ export default function RatingDistribution({
     return (
       <div
         className="flex h-2 w-full min-w-[80px] overflow-hidden rounded-full bg-gray-800"
-        title={rows.map((r) => `${r.rating}: ${r.count}`).join('  ')}
+        title={rows
+          .map((r) => `${PERFORMANCE_RATING_LABELS[r.rating]}: ${r.count}`)
+          .join('  ')}
       >
         {rows
           .filter((row) => row.count > 0)
@@ -57,12 +59,15 @@ export default function RatingDistribution({
   // even when one bucket dominates.
   const peak = Math.max(...rows.map((row) => row.count))
 
+  // Best at the top, worst at the bottom — reads like a ranking rather than a
+  // numeric axis. The strip variant keeps its 1-to-5 left-to-right order,
+  // where ascending matches reading direction.
   return (
     <div className="space-y-1.5">
-      {rows.map((row) => (
+      {[...rows].reverse().map((row) => (
         <div key={row.rating} className="flex items-center gap-2 text-xs">
           <span className="w-24 shrink-0 text-gray-400">
-            {row.rating} {PERFORMANCE_RATING_LABELS[row.rating]}
+            {PERFORMANCE_RATING_LABELS[row.rating]}
           </span>
           <div className="h-3 flex-1 rounded bg-gray-800">
             <div
@@ -70,12 +75,14 @@ export default function RatingDistribution({
               style={{ width: peak > 0 ? `${(row.count / peak) * 100}%` : '0%' }}
             />
           </div>
-          <span className="w-16 shrink-0 text-right tabular-nums text-gray-300">
+          {/* Count and percentage get their own fixed-width, right-aligned
+              cells. In a single cell the two values shift against each other
+              as digit counts change, so a 0 would not line up under a 3. */}
+          <span className="w-10 shrink-0 text-right tabular-nums text-gray-300">
             {row.count}
-            <span className="text-gray-600">
-              {' '}
-              {Math.round((row.count / total) * 100)}%
-            </span>
+          </span>
+          <span className="w-10 shrink-0 text-right tabular-nums text-gray-600">
+            {Math.round((row.count / total) * 100)}%
           </span>
         </div>
       ))}
