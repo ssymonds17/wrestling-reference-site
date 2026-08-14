@@ -68,6 +68,19 @@ const nameOptionsFor = (wrestler: Wrestler): string[] => [
   ...wrestler.aliases.map((a) => a.display),
 ]
 
+/**
+ * Ids already picked on other rows, so each row's search can disable them.
+ * The row's own pick is excluded from the list, otherwise re-opening a row
+ * would show its current wrestler as unavailable.
+ */
+const pickedIdsExcept = (
+  participants: ParticipantRow[],
+  index: number,
+): string[] =>
+  participants
+    .filter((p, i) => i !== index && p.wrestler)
+    .map((p) => p.wrestler!._id)
+
 const buildPayload = (
   form: FormState,
   participants: ParticipantRow[],
@@ -87,6 +100,21 @@ const buildPayload = (
   )
   if (cleaned.length < 2) {
     return { error: 'A match needs at least two participants' }
+  }
+
+  // Backstop for the disabled search results. A duplicate wrestler would leave
+  // ratingCounts inflated against totalMatches, since the wrestler rollup
+  // unwinds the participants array while the match count does not.
+  // See Follow-ups in PLAN.md — the API does not reject this yet.
+  const seen = new Set<string>()
+  for (const p of cleaned) {
+    const id = p.wrestler!._id
+    if (seen.has(id)) {
+      return {
+        error: `${p.wrestler!.displayName} is already a participant — each wrestler can only appear once`,
+      }
+    }
+    seen.add(id)
   }
   return {
     date: form.date,
@@ -361,6 +389,7 @@ function NewMatch() {
                     selected={wrestler}
                     onSelect={selectWrestler(index)}
                     placeholder={`Participant ${index + 1}...`}
+                    excludeIds={pickedIdsExcept(participants, index)}
                   />
                   {hasAliases && wrestler ? (
                     <select
