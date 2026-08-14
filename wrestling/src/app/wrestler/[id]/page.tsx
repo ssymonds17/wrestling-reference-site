@@ -194,7 +194,6 @@ export default function WrestlerPage({ params }: WrestlerPageProps) {
                   <th className="px-3 py-2 text-left font-medium">Score</th>
                   <th className="px-3 py-2 text-left font-medium">Ratings</th>
                   <th className="px-3 py-2 text-left font-medium">Tier</th>
-                  <th className="px-3 py-2 text-right font-medium">Points</th>
                 </tr>
               </thead>
               <tbody>
@@ -223,15 +222,12 @@ export default function WrestlerPage({ params }: WrestlerPageProps) {
                     <td className="px-3 py-2">
                       <TierBadge tier={year.yearTier} />
                     </td>
-                    <td className="px-3 py-2 text-right tabular-nums text-gray-300">
-                      {year.yearTierPoints || '—'}
-                    </td>
                   </tr>
                 ))}
                 {years.length === 0 && (
                   <tr>
                     <td
-                      colSpan={6}
+                      colSpan={5}
                       className="px-3 py-6 text-center text-gray-500"
                     >
                       No year stats yet. Run the wrestler-year recompute after
