@@ -38,12 +38,12 @@ export default function MatchesTable({
         <table className="w-full text-sm">
           <thead className="bg-gray-900 text-gray-400">
             <tr>
+              <HeaderCell>Rating</HeaderCell>
               <HeaderCell>Date</HeaderCell>
               <HeaderCell>Promotion</HeaderCell>
               <HeaderCell>Show</HeaderCell>
               <HeaderCell>Match</HeaderCell>
               <HeaderCell>Type</HeaderCell>
-              <HeaderCell>Rating</HeaderCell>
               <HeaderCell>
                 {perspective ? "Performance" : "Participants"}
               </HeaderCell>
@@ -62,6 +62,9 @@ export default function MatchesTable({
                   key={match._id}
                   className="border-t border-gray-800 hover:bg-gray-900/40"
                 >
+                  <td className="px-3 py-2">
+                    <MatchRatingBadge rating={match.overallMatchRating} />
+                  </td>
                   {/* Deliberately not a link: the only route to the match page
                       is the Match column, and the card URL is surfaced on the
                       match page itself rather than here. */}
@@ -81,9 +84,6 @@ export default function MatchesTable({
                     </Link>
                   </td>
                   <td className="px-3 py-2 text-gray-400">{match.matchTitle}</td>
-                  <td className="px-3 py-2">
-                    <MatchRatingBadge rating={match.overallMatchRating} />
-                  </td>
                   <td className="px-3 py-2">
                     {perspective ? (
                       <PerformanceBadge
