@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { getCareerLeaderboard, LeaderboardEntry } from '@/lib/api'
 import { errorMessage } from '@/lib/format'
 import LeaderboardTable from '@/components/Table/LeaderboardTable'
+import { tierClasses } from '@/components/TierBadge'
 import { TIERS } from '@/lib/tiers'
 
 const LIMIT_OPTIONS = [25, 50, 100, 250]
@@ -57,13 +58,22 @@ export default function LeaderboardPage() {
         </label>
       </div>
 
-      <p className="mb-4 flex flex-wrap gap-x-5 gap-y-1 text-xs text-gray-500">
+      {/* Doubles as the key for the grid: the pills carry point values, so the
+          legend pairs each value with its tier name in the same colour. */}
+      <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-500">
         {TIERS.map((tier) => (
-          <span key={tier.name}>
-            {tier.name} = {tier.points} pts/year
+          <span key={tier.name} className="flex items-center gap-1.5">
+            <span
+              className={`inline-block min-w-[2rem] rounded border px-1.5 py-0.5 text-center font-medium tabular-nums ${tierClasses(
+                tier.name,
+              )}`}
+            >
+              {tier.points}
+            </span>
+            {tier.name}
           </span>
         ))}
-      </p>
+      </div>
 
       {error && <p className="mb-3 text-sm text-red-400">{error}</p>}
 

@@ -17,14 +17,19 @@ interface TierBadgeProps {
  * does in MatchRatingBadge: at matching opacity it washes out to a dull
  * yellow.
  */
-const TIER_CLASSES: Record<string, string> = {
+export const TIER_CLASSES: Record<string, string> = {
   'World Class': 'bg-purple-500/15 text-purple-300 border-purple-500/40',
   'Great Worker': 'bg-yellow-400/25 text-yellow-100 border-yellow-400/70',
   'Flashes of Great': 'bg-green-500/15 text-green-300 border-green-500/40',
   Notable: 'bg-blue-500/15 text-blue-300 border-blue-500/40',
 }
 
-const FALLBACK_CLASSES = 'bg-gray-700/30 text-gray-300 border-gray-600'
+export const TIER_FALLBACK_CLASSES =
+  'bg-gray-700/30 text-gray-300 border-gray-600'
+
+/** The classes for a tier, falling back to neutral for an unknown name. */
+export const tierClasses = (tier: string): string =>
+  TIER_CLASSES[tier] ?? TIER_FALLBACK_CLASSES
 
 export default function TierBadge({ tier }: TierBadgeProps) {
   if (!tier) {
@@ -33,9 +38,9 @@ export default function TierBadge({ tier }: TierBadgeProps) {
 
   return (
     <span
-      className={`inline-block whitespace-nowrap rounded border px-2 py-0.5 text-xs font-medium ${
-        TIER_CLASSES[tier] ?? FALLBACK_CLASSES
-      }`}
+      className={`inline-block whitespace-nowrap rounded border px-2 py-0.5 text-xs font-medium ${tierClasses(
+        tier,
+      )}`}
     >
       {tier}
     </span>
