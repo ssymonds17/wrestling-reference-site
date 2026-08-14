@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
+import Nav from '@/components/Nav'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,6 +21,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <div className="min-h-screen bg-gray-950 text-gray-100">
+            <Nav />
             <main className="container mx-auto px-4 py-8">
               {children}
             </main>
