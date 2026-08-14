@@ -110,9 +110,18 @@ export default function MatchesTable({
               <HeaderCell>Show</HeaderCell>
               <HeaderCell>Match</HeaderCell>
               <HeaderCell>Type</HeaderCell>
-              <HeaderCell>
-                {perspective ? "Performance" : "Participants"}
-              </HeaderCell>
+              {/* Performance is only sortable in perspective mode — without a
+                  wrestler to sort by, the API rejects sortBy=performance. */}
+              {perspective ? (
+                <SortableHeader
+                  label="Performance"
+                  sortBy="performance"
+                  sort={sort}
+                  onSortChange={onSortChange}
+                />
+              ) : (
+                <HeaderCell>Participants</HeaderCell>
+              )}
             </tr>
           </thead>
           <tbody>

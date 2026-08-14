@@ -5,10 +5,16 @@ export interface PromotionAlias {
   fullName: string
 }
 
+/**
+ * `abbreviation` is required: it is the era label a match is recorded under, so
+ * a promotion without one cannot have any match attached to it. The match form
+ * builds its label dropdown from the canonical abbreviation plus each alias
+ * abbreviation, and an empty dropdown blocks submission entirely.
+ */
 export interface PromotionDocument extends mongoose.Document {
   name: string
   displayName: string
-  abbreviation?: string
+  abbreviation: string
   aliases: PromotionAlias[]
   notes?: string
   cagematchUrl?: string
@@ -17,7 +23,7 @@ export interface PromotionDocument extends mongoose.Document {
 export type PromotionData = {
   name: string
   displayName: string
-  abbreviation?: string
+  abbreviation: string
   aliases?: PromotionAlias[]
   notes?: string
   cagematchUrl?: string
@@ -34,7 +40,7 @@ const aliasSubSchema = new mongoose.Schema(
 const promotionSchema = new mongoose.Schema({
   name: { type: String, required: true },
   displayName: { type: String, required: true },
-  abbreviation: { type: String },
+  abbreviation: { type: String, required: true },
   aliases: { type: [aliasSubSchema], default: [] },
   notes: { type: String },
   cagematchUrl: { type: String },

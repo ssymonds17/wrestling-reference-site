@@ -21,7 +21,7 @@ const buildAlias = (alias: PromotionAlias): PromotionAlias => ({
 
 export const createPromotion = async (input: {
   displayName: string
-  abbreviation?: string
+  abbreviation: string
   aliases?: PromotionAlias[]
   notes?: string
   cagematchUrl?: string
@@ -51,7 +51,11 @@ export const getPromotionById = async (id: string) => {
 
 export interface PromotionUpdateInput {
   displayName?: string
-  abbreviation?: string | null
+  /**
+   * No null option, unlike notes and cagematchUrl: abbreviation is required, so
+   * it can be changed but never cleared. Omit the key to leave it alone.
+   */
+  abbreviation?: string
   aliases?: PromotionAlias[]
   notes?: string | null
   cagematchUrl?: string | null
@@ -59,7 +63,7 @@ export interface PromotionUpdateInput {
 
 export const updatePromotion = async (
   id: string,
-  input: PromotionUpdateInput
+  input: PromotionUpdateInput,
 ) => {
   const updates: Record<string, unknown> = {}
   const unsets: Record<string, unknown> = {}
@@ -69,9 +73,7 @@ export const updatePromotion = async (
     updates.name = input.displayName.toLowerCase()
   }
 
-  if (input.abbreviation === null) {
-    unsets.abbreviation = ""
-  } else if (input.abbreviation !== undefined) {
+  if (input.abbreviation !== undefined) {
     updates.abbreviation = input.abbreviation
   }
 
@@ -105,7 +107,7 @@ export const updatePromotion = async (
 export class PromotionReferencedError extends Error {
   constructor(public readonly promotionId: string) {
     super(
-      `Promotion ${promotionId} is referenced by at least one match; remove references first.`
+      `Promotion ${promotionId} is referenced by at least one match; remove references first.`,
     )
     this.name = "PromotionReferencedError"
   }

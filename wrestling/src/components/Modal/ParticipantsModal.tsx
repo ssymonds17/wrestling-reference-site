@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { getWrestlerById, Match } from "@/lib/api"
+import { getWrestlersByIds, Match } from "@/lib/api"
 import { formatDate } from "@/lib/format"
 import Modal from "@/components/Modal/Modal"
 import PerformanceBadge from "@/components/Rating/PerformanceBadge"
@@ -21,13 +21,9 @@ export default function ParticipantsModal({
   highlightWrestlerId,
 }: ParticipantsModalProps) {
   // A match participant stores only the name used in that match, so the
-  // canonical name has to be looked up per wrestler. Resolved names are
-  // cached for the lifetime of the table, since the same wrestlers recur
-  // heavily across a filtered list of matches.
-  //
-  // TODO: replace this fan-out with a single batch call once
-  // `GET /wrestlers?ids=` exists — see Follow-ups in PLAN.md. A 30-entrant
-  // rumble fires 30 requests on first open.
+  // canonical name has to be looked up. One batch request resolves the whole
+  // participant list, and resolved names are cached for the lifetime of the
+  // table since the same wrestlers recur heavily across a filtered list.
   const cache = useRef<Map<string, string>>(new Map())
   const [canonicalNames, setCanonicalNames] = useState<Map<string, string>>(
     new Map(),
@@ -50,23 +46,19 @@ export default function ParticipantsModal({
     if (missing.length === 0) return
 
     let active = true
-    Promise.all(
-      missing.map(async (id) => {
-        try {
-          const wrestler = await getWrestlerById(id)
-          return [id, wrestler.displayName] as const
-        } catch {
-          // A failed lookup just means no canonical name is shown for that
-          // participant; the per-match name is still rendered.
-          return null
+    getWrestlersByIds(missing)
+      .then((wrestlers) => {
+        // Keyed off the returned ids rather than the requested order: the API
+        // drops unknown or malformed ids, so the result can be shorter.
+        for (const wrestler of wrestlers) {
+          cache.current.set(wrestler._id, wrestler.displayName)
         }
-      }),
-    ).then((results) => {
-      for (const result of results) {
-        if (result) cache.current.set(result[0], result[1])
-      }
-      if (active) setCanonicalNames(new Map(cache.current))
-    })
+        if (active) setCanonicalNames(new Map(cache.current))
+      })
+      .catch(() => {
+        // A failed lookup just leaves the per-match names showing, which is
+        // still correct, just less informative.
+      })
 
     return () => {
       active = false

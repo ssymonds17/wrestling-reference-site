@@ -5,9 +5,10 @@ import {
   MatchListFilters,
   MatchSortBy,
   MatchSortDir,
+  PerformanceSortNeedsWrestlerError,
 } from "./mongodb/services/matches"
 
-const VALID_SORT_BY = new Set<MatchSortBy>(["date", "rating"])
+const VALID_SORT_BY = new Set<MatchSortBy>(["date", "rating", "performance"])
 const VALID_SORT_DIR = new Set<MatchSortDir>(["asc", "desc"])
 
 const handler = async (event: any) => {
@@ -35,6 +36,15 @@ const handler = async (event: any) => {
       filters.sortDir = params.sortDir
     }
 
+    // Recognised but unusable is a 400 rather than a silent fallback: sorting by
+    // performance without saying whose would quietly return a different order
+    // than the caller asked for.
+    if (filters.sortBy === "performance" && !filters.wrestlerId) {
+      return createApiResponse(400, {
+        message: "sortBy=performance requires a wrestlerId",
+      })
+    }
+
     const { data, total } = await getMatches(filters)
 
     return createApiResponse(200, {
@@ -47,6 +57,11 @@ const handler = async (event: any) => {
       sortDir: filters.sortDir ?? "desc",
     })
   } catch (error) {
+    // Belt and braces — the handler guards this above, but the service throws
+    // too so a future caller cannot get nonsense ordering by accident.
+    if (error instanceof PerformanceSortNeedsWrestlerError) {
+      return createApiResponse(400, { message: error.message })
+    }
     logger.error(`Error getting matches: ${error}`)
     return createApiResponse(502, { message: "Could not get matches" })
   }

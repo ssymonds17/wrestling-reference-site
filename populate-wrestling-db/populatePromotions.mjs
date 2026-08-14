@@ -48,7 +48,13 @@ async function main() {
   for (const row of rows) {
     const displayName = (row["Full Name"] || "").trim()
     if (!displayName) continue
+    // Required by the API since 2026-08-14 — it is the era label matches are
+    // recorded under. Skip loudly rather than letting the POST 400.
     const abbreviation = (row["Abbreviation"] || "").trim()
+    if (!abbreviation) {
+      console.warn(`Skipping "${displayName}": no Abbreviation in the CSV`)
+      continue
+    }
     const cagematchUrl = (row["Cagematch"] || "").trim() || undefined
     const aliases = buildAliases(row)
 

@@ -4,6 +4,8 @@ export {
   createWrestler,
   getWrestlers,
   getWrestlerById,
+  getWrestlersByIds,
+  MAX_WRESTLER_IDS,
   updateWrestler,
   deleteWrestler,
   recomputeWrestlerStats,
@@ -39,10 +41,14 @@ export {
   updateMatch,
   updateParticipantRating,
   updateOverallMatchRating,
+  DuplicateParticipantError,
   InvalidOverallMatchRatingError,
   ParticipantNotFoundError,
+  PerformanceSortNeedsWrestlerError,
 } from "./services/matches"
 export type {
+  MatchSortBy,
+  MatchSortDir,
   MatchListFilters,
   CreateMatchInput,
   CreateMatchParticipantInput,

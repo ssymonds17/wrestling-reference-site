@@ -1,3 +1,4 @@
+import mongoose from "mongoose"
 import Wrestler, {
   WrestlerData,
   WrestlerRatingCounts,
@@ -47,6 +48,31 @@ export const getWrestlers = async (filters?: WrestlerListFilters) => {
 
 export const getWrestlerById = async (id: string) => {
   return Wrestler.findById(id).exec()
+}
+
+/** Guards against a caller asking for an unbounded number of ids. */
+export const MAX_WRESTLER_IDS = 100
+
+/**
+ * Batch fetch by id, for resolving a list of participants in one request rather
+ * than one request per wrestler.
+ *
+ * Malformed ids are dropped rather than throwing: a single bad id in a list of
+ * thirty should not blank the whole result. Callers get back only what resolved,
+ * so they must tolerate a shorter array than they asked for — which they have to
+ * anyway, since an id can be well-formed but deleted.
+ */
+export const getWrestlersByIds = async (ids: string[]) => {
+  const objectIds = ids
+    .slice(0, MAX_WRESTLER_IDS)
+    .filter((id) => mongoose.Types.ObjectId.isValid(id))
+    .map((id) => new mongoose.Types.ObjectId(id))
+
+  if (objectIds.length === 0) return []
+
+  return Wrestler.find({ _id: { $in: objectIds } })
+    .sort({ displayName: 1 })
+    .exec()
 }
 
 export interface WrestlerUpdateInput {

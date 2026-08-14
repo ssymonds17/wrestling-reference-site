@@ -13,7 +13,9 @@ const buildPatch = (body: any): PromotionUpdateInput => {
     patch.displayName = body.displayName
   }
 
-  if (body.abbreviation === null || typeof body.abbreviation === "string") {
+  // Deliberately no null branch: abbreviation is required, so clearing it is
+  // rejected rather than unsetting the field. An omitted key leaves it alone.
+  if (typeof body.abbreviation === "string") {
     patch.abbreviation = body.abbreviation
   }
 
@@ -46,6 +48,20 @@ const handlerImpl = async (event: any, _userId: string) => {
     }
 
     const body = JSON.parse(event.body || "{}")
+
+    // Answered explicitly rather than dropped by buildPatch, so a caller trying
+    // to clear the field is told why instead of getting a silent no-op.
+    if (
+      body.abbreviation === null ||
+      (typeof body.abbreviation === "string" &&
+        body.abbreviation.trim().length === 0)
+    ) {
+      return createApiResponse(400, {
+        message:
+          "abbreviation cannot be cleared — it is the label matches are recorded under",
+      })
+    }
+
     const patch = buildPatch(body)
 
     if (Object.keys(patch).length === 0) {

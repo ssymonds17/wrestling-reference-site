@@ -24,12 +24,23 @@ const handlerImpl = async (event: any, _userId: string) => {
       })
     }
 
+    // Required because it is the era label matches are recorded under — a
+    // promotion without one cannot have matches attached.
+    if (
+      typeof body.abbreviation !== "string" ||
+      body.abbreviation.trim().length === 0
+    ) {
+      return createApiResponse(400, {
+        message:
+          "abbreviation is required and must be a non-empty string — it is the label matches are recorded under",
+      })
+    }
+
     await connectToDatabase()
 
     const promotion = await createPromotion({
       displayName: body.displayName,
-      abbreviation:
-        typeof body.abbreviation === "string" ? body.abbreviation : undefined,
+      abbreviation: body.abbreviation.trim(),
       aliases: parseAliases(body.aliases),
       notes: typeof body.notes === "string" ? body.notes : undefined,
       cagematchUrl:

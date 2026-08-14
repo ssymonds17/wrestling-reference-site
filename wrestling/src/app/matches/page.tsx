@@ -33,6 +33,10 @@ const EMPTY_FILTERS: MatchFilterState = {
 
 const DEFAULT_SORT: MatchSort = { sortBy: 'date', sortDir: 'desc' }
 
+// 'performance' is deliberately excluded. This page has no single wrestler to
+// sort by — the API 400s without a wrestlerId — and the table shows the
+// participants pill rather than a performance column here. A URL asking for it
+// falls back to the default rather than erroring. Do not add it.
 const VALID_SORT_BY: MatchSortBy[] = ['date', 'rating']
 const VALID_SORT_DIR: MatchSortDir[] = ['asc', 'desc']
 

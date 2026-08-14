@@ -151,6 +151,26 @@ export const getWrestlerById = async (id: string): Promise<Wrestler> => {
   return data.data
 }
 
+/** Ids beyond this are rejected by the API rather than silently truncated. */
+export const MAX_WRESTLER_IDS = 100
+
+/**
+ * Batch fetch by id, for resolving a whole participant list in one request.
+ * The API drops malformed or unknown ids rather than failing, so the result may
+ * be shorter than the input — callers must key off the returned ids, not order.
+ */
+export const getWrestlersByIds = async (
+  ids: string[],
+): Promise<Wrestler[]> => {
+  if (ids.length === 0) return []
+
+  const { data } = await axios.get<ListResponse<Wrestler>>(
+    `${API_URL}/wrestlers`,
+    { params: { ids: ids.slice(0, MAX_WRESTLER_IDS).join(',') } },
+  )
+  return data.data
+}
+
 export const createWrestler = async (
   input: CreateWrestlerInput,
   getToken: GetToken,
@@ -222,11 +242,10 @@ export interface CreateMatchResponse {
 // GET /matches is public; POST /match requires a Clerk JWT.
 
 /**
- * Sorting by a wrestler's own performance rating is not supported yet — it
- * lives inside the participants array, so it needs an aggregation on the API
- * side. See Follow-ups in PLAN.md.
+ * 'performance' sorts by one wrestler's own rating, so it is only valid
+ * alongside a wrestlerId — the API returns 400 without one.
  */
-export type MatchSortBy = 'date' | 'rating'
+export type MatchSortBy = 'date' | 'rating' | 'performance'
 export type MatchSortDir = 'asc' | 'desc'
 
 export interface MatchFilters {

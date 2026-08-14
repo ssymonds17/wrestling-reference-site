@@ -4,6 +4,7 @@ import { connectToDatabase, OVERALL_MATCH_RATING_VALUES } from "./mongodb"
 import {
   updateMatch,
   UpdateMatchInput,
+  DuplicateParticipantError,
   InvalidOverallMatchRatingError,
   CreateMatchParticipantInput,
 } from "./mongodb/services/matches"
@@ -133,6 +134,12 @@ const handlerImpl = async (event: any, _userId: string) => {
         message: "Invalid overallMatchRating",
         allowedValues: OVERALL_MATCH_RATING_VALUES,
         received: error.value,
+      })
+    }
+    if (error instanceof DuplicateParticipantError) {
+      return createApiResponse(400, {
+        message: error.message,
+        wrestlerId: error.wrestlerId,
       })
     }
     logger.error(`Error updating match: ${error}`)

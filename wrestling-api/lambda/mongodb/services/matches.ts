@@ -12,8 +12,18 @@ const toObjectId = (
 ): mongoose.Types.ObjectId =>
   typeof id === "string" ? new mongoose.Types.ObjectId(id) : id
 
-export type MatchSortBy = "date" | "rating"
+export type MatchSortBy = "date" | "rating" | "performance"
 export type MatchSortDir = "asc" | "desc"
+
+/** Only meaningful alongside a wrestlerId — there is no whose to sort by. */
+export const REQUIRES_WRESTLER_ID: MatchSortBy = "performance"
+
+export class PerformanceSortNeedsWrestlerError extends Error {
+  constructor() {
+    super("sortBy=performance requires a wrestlerId")
+    this.name = "PerformanceSortNeedsWrestlerError"
+  }
+}
 
 export interface MatchListFilters {
   year?: number
@@ -27,17 +37,18 @@ export interface MatchListFilters {
 }
 
 /**
- * Both sorts fall back to date then _id so paging is stable — without a unique
- * final tie-breaker, documents with equal sort values can shuffle between
- * pages and a row may be seen twice or missed entirely.
+ * Every sort falls back to date then _id so paging is stable — without a unique
+ * final tie-breaker, documents with equal sort values can shuffle between pages
+ * and a row may be seen twice or missed entirely.
  *
- * Sorting by a wrestler's own performanceRating is deliberately absent: it
- * lives inside the participants array, so Mongo would sort by the array's
- * max (desc) or min (asc) element rather than by the wrestler in question.
- * That needs an aggregation — see Follow-ups in PLAN.md.
+ * "performance" is absent here because it cannot be expressed as a plain sort
+ * object: performanceRating lives inside the participants array, so Mongo would
+ * order each document by the array's max element on descending and its min on
+ * ascending — i.e. by whoever performed best in the match, not by the wrestler
+ * being asked about. It goes through the aggregation path below instead.
  */
 const MATCH_SORT_ORDERS: Record<
-  MatchSortBy,
+  Exclude<MatchSortBy, "performance">,
   Record<MatchSortDir, Record<string, 1 | -1>>
 > = {
   date: {
@@ -49,6 +60,68 @@ const MATCH_SORT_ORDERS: Record<
     asc: { overallMatchRating: 1, date: -1, _id: -1 },
   },
 }
+
+/**
+ * Unrated performances sort last in BOTH directions. Mongo places null before
+ * numbers ascending, which would otherwise lead an ascending list with every
+ * unrated match. Ratings are 1-5, so the sentinels sit safely outside the range:
+ * a high value sinks nulls when sorting descending, a low one when ascending.
+ */
+const NULL_SENTINEL: Record<MatchSortDir, number> = {
+  desc: Number.NEGATIVE_INFINITY,
+  asc: Number.POSITIVE_INFINITY,
+}
+
+/**
+ * Sorts by one specific wrestler's performanceRating by lifting it out of the
+ * participants array into a top-level field first. `$filter` picks their
+ * subdocument, `$first` unwraps the single match, and `$ifNull` applies the
+ * direction-appropriate sentinel so unrated matches sink to the bottom.
+ */
+const performanceSortPipeline = (
+  query: Record<string, unknown>,
+  wrestlerId: mongoose.Types.ObjectId,
+  sortDir: MatchSortDir,
+  offset: number,
+  limit: number
+) => [
+  { $match: query },
+  {
+    $addFields: {
+      _performance: {
+        $ifNull: [
+          {
+            $let: {
+              vars: {
+                own: {
+                  $first: {
+                    $filter: {
+                      input: "$participants",
+                      as: "p",
+                      cond: { $eq: ["$$p.wrestlerId", wrestlerId] },
+                    },
+                  },
+                },
+              },
+              in: "$$own.performanceRating",
+            },
+          },
+          NULL_SENTINEL[sortDir],
+        ],
+      },
+    },
+  },
+  {
+    $sort: {
+      _performance: sortDir === "desc" ? -1 : 1,
+      date: -1,
+      _id: -1,
+    } as Record<string, 1 | -1>,
+  },
+  { $skip: offset },
+  { $limit: limit },
+  { $unset: "_performance" },
+]
 
 export interface MatchListResult {
   data: Awaited<ReturnType<typeof Match.find>>
@@ -84,6 +157,34 @@ export class InvalidOverallMatchRatingError extends Error {
   }
 }
 
+export class DuplicateParticipantError extends Error {
+  constructor(public readonly wrestlerId: string) {
+    super(`Wrestler ${wrestlerId} appears more than once in this match`)
+    this.name = "DuplicateParticipantError"
+  }
+}
+
+/**
+ * A wrestler must not appear twice in one match. Beyond being nonsense, a
+ * duplicate corrupts the rollups asymmetrically: Wrestler.totalMatches counts
+ * documents so is unaffected, while the ratingCounts aggregation unwinds the
+ * participants array and double-counts. The result is ratingCounts summing
+ * higher than totalMatches with no error raised anywhere.
+ *
+ * Checked in the service so create and update share one implementation —
+ * update is the likelier route in, since it replaces the array wholesale.
+ */
+const assertNoDuplicateParticipants = (
+  participants: CreateMatchParticipantInput[]
+): void => {
+  const seen = new Set<string>()
+  for (const participant of participants) {
+    const id = String(participant.wrestlerId)
+    if (seen.has(id)) throw new DuplicateParticipantError(id)
+    seen.add(id)
+  }
+}
+
 const normalisePerformanceRating = (raw: unknown): number | null => {
   if (raw === null || raw === undefined) return null
   return Number(raw)
@@ -93,6 +194,8 @@ export const createMatch = async (input: CreateMatchInput) => {
   if (!OVERALL_MATCH_RATING_SET.has(input.overallMatchRating)) {
     throw new InvalidOverallMatchRatingError(input.overallMatchRating)
   }
+
+  assertNoDuplicateParticipants(input.participants)
 
   const participants = input.participants.map((p) => ({
     wrestlerId: toObjectId(p.wrestlerId),
@@ -139,15 +242,38 @@ export const getMatches = async (filters?: MatchListFilters) => {
   const sortBy = filters?.sortBy ?? "date"
   const sortDir = filters?.sortDir ?? "desc"
 
-  // Counted against the same query so the total reflects the filters but not
-  // the page window.
+  // The total always comes from countDocuments on the match query rather than a
+  // $count on the pipeline: it is the same number either way, but this keeps it
+  // index-only and lets both paths share it.
+  const totalPromise = Match.countDocuments(query).exec()
+
+  if (sortBy === "performance") {
+    if (!filters?.wrestlerId) throw new PerformanceSortNeedsWrestlerError()
+
+    const [data, total] = await Promise.all([
+      Match.aggregate(
+        performanceSortPipeline(
+          query,
+          toObjectId(filters.wrestlerId),
+          sortDir,
+          offset,
+          limit
+        )
+      ).exec(),
+      totalPromise,
+    ])
+
+    return { data, total }
+  }
+
+  // date and rating stay on find() so the common case remains index-backed.
   const [data, total] = await Promise.all([
     Match.find(query)
       .sort(MATCH_SORT_ORDERS[sortBy][sortDir])
       .skip(offset)
       .limit(limit)
       .exec(),
-    Match.countDocuments(query).exec(),
+    totalPromise,
   ])
 
   return { data, total }
@@ -248,6 +374,10 @@ export const updateMatch = async (
   }
 
   if (input.participants !== undefined) {
+    // Checked before the write, since a replacement array is the easiest way to
+    // introduce a duplicate.
+    assertNoDuplicateParticipants(input.participants)
+
     const rebuiltParticipants = input.participants.map((p) => ({
       wrestlerId: toObjectId(p.wrestlerId),
       displayName: p.displayName,
