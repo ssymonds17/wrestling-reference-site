@@ -2,11 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import {
-  getYearStandings,
-  WrestlerYear,
-  YearStandingsSortBy,
-} from '@/lib/api'
+import { getYearStandings, WrestlerYear } from '@/lib/api'
 import { errorMessage } from '@/lib/format'
 import YearStandingsTable from '@/components/Table/YearStandingsTable'
 import { TIERS } from '@/lib/tiers'
@@ -20,7 +16,6 @@ const MIN_MATCHES_OPTIONS = [0, 5, 10, 20]
 export default function YearPage({ params }: YearPageProps) {
   const year = Number.parseInt(params.year, 10)
   const [standings, setStandings] = useState<WrestlerYear[]>([])
-  const [sortBy, setSortBy] = useState<YearStandingsSortBy>('formulaScore')
   const [minMatches, setMinMatches] = useState(0)
   const [tieredOnly, setTieredOnly] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -35,14 +30,16 @@ export default function YearPage({ params }: YearPageProps) {
     setLoading(true)
     setError(null)
     try {
-      const { data } = await getYearStandings(year, sortBy)
+      // Always formulaScore desc — the endpoint's default and the standings
+      // order. Sorting is not exposed in the UI.
+      const { data } = await getYearStandings(year)
       setStandings(data)
     } catch (err) {
       setError(errorMessage(err, 'Could not load standings'))
     } finally {
       setLoading(false)
     }
-  }, [year, sortBy])
+  }, [year])
 
   useEffect(() => {
     load()
@@ -141,8 +138,6 @@ export default function YearPage({ params }: YearPageProps) {
         <YearStandingsTable
           standings={visible}
           loading={loading}
-          sortBy={sortBy}
-          onSortChange={setSortBy}
         />
       </div>
 

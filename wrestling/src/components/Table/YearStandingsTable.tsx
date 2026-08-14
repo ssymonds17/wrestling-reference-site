@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { WrestlerYear, YearStandingsSortBy } from '@/lib/api'
+import { WrestlerYear } from '@/lib/api'
 import { formatScore } from '@/lib/format'
 import RatingDistribution from '@/components/Rating/RatingDistribution'
 import TierBadge from '@/components/TierBadge'
@@ -7,8 +7,6 @@ import TierBadge from '@/components/TierBadge'
 interface YearStandingsTableProps {
   standings: WrestlerYear[]
   loading?: boolean
-  sortBy: YearStandingsSortBy
-  onSortChange: (sortBy: YearStandingsSortBy) => void
   /**
    * Rendered in a trailing actions column when supplied — this is the seam
    * the tier-assignment control plugs into.
@@ -16,11 +14,15 @@ interface YearStandingsTableProps {
   renderActions?: (row: WrestlerYear) => React.ReactNode
 }
 
+/**
+ * Deliberately not sortable. Rows arrive in formulaScore order, which is the
+ * standings order. Tier is assigned off the back of that score, so ordering by
+ * tier produces a near-identical list — the choice was redundant rather than
+ * useful.
+ */
 export default function YearStandingsTable({
   standings,
   loading = false,
-  sortBy,
-  onSortChange,
   renderActions,
 }: YearStandingsTableProps) {
   const columnCount = renderActions ? 9 : 8
@@ -33,18 +35,7 @@ export default function YearStandingsTable({
             <th className="px-3 py-2 text-left font-medium">#</th>
             <th className="px-3 py-2 text-left font-medium">Wrestler</th>
             <th className="px-3 py-2 text-left font-medium">Matches</th>
-            <th className="px-3 py-2 text-left font-medium">
-              <button
-                type="button"
-                onClick={() => onSortChange('formulaScore')}
-                className={`hover:text-gray-200 ${
-                  sortBy === 'formulaScore' ? 'text-blue-400' : ''
-                }`}
-              >
-                Score
-                {sortBy === 'formulaScore' && <span aria-hidden> &darr;</span>}
-              </button>
-            </th>
+            <th className="px-3 py-2 text-left font-medium">Score</th>
             <th
               className="px-3 py-2 text-left font-medium"
               title="Weighted average of performance ratings (K)"
@@ -58,18 +49,7 @@ export default function YearStandingsTable({
               L
             </th>
             <th className="px-3 py-2 text-left font-medium">Ratings</th>
-            <th className="px-3 py-2 text-left font-medium">
-              <button
-                type="button"
-                onClick={() => onSortChange('yearTierPoints')}
-                className={`hover:text-gray-200 ${
-                  sortBy === 'yearTierPoints' ? 'text-blue-400' : ''
-                }`}
-              >
-                Tier
-                {sortBy === 'yearTierPoints' && <span aria-hidden> &darr;</span>}
-              </button>
-            </th>
+            <th className="px-3 py-2 text-left font-medium">Tier</th>
             {renderActions && (
               <th className="px-3 py-2 text-right font-medium">Actions</th>
             )}
