@@ -1,10 +1,10 @@
-'use client'
+"use client"
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
-import { SignedIn, useAuth } from '@clerk/nextjs'
-import { createPromotion, getPromotions, Promotion } from '@/lib/api'
-import { errorMessage } from '@/lib/format'
+import { useCallback, useEffect, useMemo, useState } from "react"
+import Link from "next/link"
+import { SignedIn, useAuth } from "@clerk/nextjs"
+import { createPromotion, getPromotions, Promotion } from "@/lib/api"
+import { errorMessage } from "@/lib/format"
 
 interface FormState {
   displayName: string
@@ -16,22 +16,22 @@ interface FormState {
 }
 
 const EMPTY_FORM: FormState = {
-  displayName: '',
-  abbreviation: '',
-  aliasAbbreviations: '',
-  aliasFullNames: '',
-  cagematchUrl: '',
-  notes: '',
+  displayName: "",
+  abbreviation: "",
+  aliasAbbreviations: "",
+  aliasFullNames: "",
+  cagematchUrl: "",
+  notes: "",
 }
 
 const splitList = (raw: string): string[] =>
   raw
-    .split(',')
+    .split(",")
     .map((item) => item.trim())
     .filter((item) => item.length > 0)
 
 const inputClasses =
-  'w-full rounded border border-gray-700 bg-gray-900 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none'
+  "w-full rounded border border-gray-700 bg-gray-900 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
 
 // Matches the promotion against every searchable form the API indexes:
 // canonical name, display name, abbreviation, and both halves of each alias.
@@ -41,7 +41,7 @@ const matchesQuery = (promotion: Promotion, query: string): boolean => {
   return (
     promotion.name.includes(q) ||
     promotion.displayName.toLowerCase().includes(q) ||
-    (promotion.abbreviation ?? '').toLowerCase().includes(q) ||
+    (promotion.abbreviation ?? "").toLowerCase().includes(q) ||
     promotion.aliases.some(
       (alias) =>
         alias.abbreviation.toLowerCase().includes(q) ||
@@ -69,7 +69,17 @@ function CreatePromotionForm({ onCreated }: { onCreated: () => void }) {
     setSuccess(null)
 
     if (!form.displayName.trim()) {
-      setError('Display name is required')
+      setError("Display name is required")
+      return
+    }
+
+    // Required here but optional in the API — see Follow-ups in PLAN.md. The
+    // abbreviation is the era label the match form offers, so a promotion
+    // without one cannot have matches attached to it at all.
+    if (!form.abbreviation.trim()) {
+      setError(
+        "Abbreviation is required — it is the label matches are recorded under",
+      )
       return
     }
 
@@ -93,7 +103,7 @@ function CreatePromotionForm({ onCreated }: { onCreated: () => void }) {
       const created = await createPromotion(
         {
           displayName: form.displayName.trim(),
-          abbreviation: form.abbreviation.trim() || undefined,
+          abbreviation: form.abbreviation.trim(),
           aliases,
           cagematchUrl: form.cagematchUrl.trim() || undefined,
           notes: form.notes.trim() || undefined,
@@ -104,7 +114,7 @@ function CreatePromotionForm({ onCreated }: { onCreated: () => void }) {
       setForm(EMPTY_FORM)
       onCreated()
     } catch (err) {
-      setError(errorMessage(err, 'Could not create promotion'))
+      setError(errorMessage(err, "Could not create promotion"))
     } finally {
       setSubmitting(false)
     }
@@ -146,19 +156,19 @@ function CreatePromotionForm({ onCreated }: { onCreated: () => void }) {
           <input
             className={inputClasses}
             value={form.displayName}
-            onChange={update('displayName')}
+            onChange={update("displayName")}
             placeholder="World Wrestling Entertainment"
           />
         </div>
         <div>
           <label className="mb-1 block text-sm text-gray-300">
-            Abbreviation{' '}
+            Abbreviation <span className="text-red-400">*</span>{" "}
             <span className="text-gray-500">(canonical short code)</span>
           </label>
           <input
             className={inputClasses}
             value={form.abbreviation}
-            onChange={update('abbreviation')}
+            onChange={update("abbreviation")}
             placeholder="WWE"
           />
         </div>
@@ -167,25 +177,25 @@ function CreatePromotionForm({ onCreated }: { onCreated: () => void }) {
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
           <label className="mb-1 block text-sm text-gray-300">
-            Alias abbreviations{' '}
+            Alias abbreviations{" "}
             <span className="text-gray-500">(comma-separated)</span>
           </label>
           <input
             className={inputClasses}
             value={form.aliasAbbreviations}
-            onChange={update('aliasAbbreviations')}
+            onChange={update("aliasAbbreviations")}
             placeholder="WWF, WWWF"
           />
         </div>
         <div>
           <label className="mb-1 block text-sm text-gray-300">
-            Alias full names{' '}
+            Alias full names{" "}
             <span className="text-gray-500">(comma-separated)</span>
           </label>
           <input
             className={inputClasses}
             value={form.aliasFullNames}
-            onChange={update('aliasFullNames')}
+            onChange={update("aliasFullNames")}
             placeholder="World Wrestling Federation, World Wide Wrestling Federation"
           />
         </div>
@@ -203,7 +213,7 @@ function CreatePromotionForm({ onCreated }: { onCreated: () => void }) {
           <input
             className={inputClasses}
             value={form.cagematchUrl}
-            onChange={update('cagematchUrl')}
+            onChange={update("cagematchUrl")}
             placeholder="https://www.cagematch.net/?id=8&nr=..."
           />
         </div>
@@ -215,7 +225,7 @@ function CreatePromotionForm({ onCreated }: { onCreated: () => void }) {
             className={inputClasses}
             rows={2}
             value={form.notes}
-            onChange={update('notes')}
+            onChange={update("notes")}
           />
         </div>
       </div>
@@ -225,7 +235,7 @@ function CreatePromotionForm({ onCreated }: { onCreated: () => void }) {
         disabled={submitting}
         className="rounded border border-blue-600 bg-blue-600 px-6 py-2 text-sm font-medium transition-colors hover:bg-blue-700 disabled:opacity-50"
       >
-        {submitting ? 'Creating...' : 'Create promotion'}
+        {submitting ? "Creating..." : "Create promotion"}
       </button>
 
       {error && <p className="text-sm text-red-400">{error}</p>}
@@ -236,7 +246,7 @@ function CreatePromotionForm({ onCreated }: { onCreated: () => void }) {
 
 export default function PromotionsPage() {
   const [promotions, setPromotions] = useState<Promotion[]>([])
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -247,7 +257,7 @@ export default function PromotionsPage() {
       const { data } = await getPromotions()
       setPromotions(data)
     } catch (err) {
-      setError(errorMessage(err, 'Could not load promotions'))
+      setError(errorMessage(err, "Could not load promotions"))
     } finally {
       setLoading(false)
     }
@@ -286,7 +296,7 @@ export default function PromotionsPage() {
           className="w-full max-w-sm rounded border border-gray-700 bg-gray-900 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
         />
         <span className="whitespace-nowrap text-sm text-gray-500">
-          {loading ? 'Loading...' : `${visible.length} of ${promotions.length}`}
+          {loading ? "Loading..." : `${visible.length} of ${promotions.length}`}
         </span>
       </div>
 
@@ -310,7 +320,7 @@ export default function PromotionsPage() {
                 className="border-t border-gray-800 hover:bg-gray-900/40"
               >
                 <td className="px-3 py-2 font-medium text-gray-200">
-                  {promotion.abbreviation ?? '—'}
+                  {promotion.abbreviation ?? "—"}
                 </td>
                 <td className="px-3 py-2">
                   {promotion.cagematchUrl ? (
@@ -346,7 +356,7 @@ export default function PromotionsPage() {
                   )}
                 </td>
                 <td className="max-w-sm px-3 py-2 text-xs text-gray-500">
-                  {promotion.notes ?? ''}
+                  {promotion.notes ?? ""}
                 </td>
                 <td className="whitespace-nowrap px-3 py-2 text-right">
                   <Link
@@ -369,8 +379,8 @@ export default function PromotionsPage() {
               <tr>
                 <td colSpan={5} className="px-3 py-6 text-center text-gray-500">
                   {query
-                    ? 'No promotions match that filter.'
-                    : 'No promotions yet.'}
+                    ? "No promotions match that filter."
+                    : "No promotions yet."}
                 </td>
               </tr>
             )}
