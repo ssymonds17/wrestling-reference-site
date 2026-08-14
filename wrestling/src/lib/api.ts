@@ -384,13 +384,13 @@ export const assignTier = async (
   year: number,
   yearTier: string | null,
   getToken: GetToken,
-): Promise<{ message: string }> => {
+): Promise<WrestlerYear> => {
   const client = await createAuthenticatedClient(getToken)
-  const { data } = await client.put<{ message: string }>(
+  const { data } = await client.put<{ data: WrestlerYear }>(
     `${API_URL}/wrestler/${wrestlerId}/year/${year}/tier`,
     { yearTier },
   )
-  return data
+  return data.data
 }
 
 // --- Search ---

@@ -4,15 +4,23 @@ import { formatScore } from '@/lib/format'
 import { scoreBreakdown } from '@/lib/score'
 import RatingDistribution from '@/components/Rating/RatingDistribution'
 import TierBadge from '@/components/TierBadge'
+import TierSelect from '@/components/Tier/TierSelect'
 
 interface YearStandingsTableProps {
   standings: WrestlerYear[]
   loading?: boolean
   /**
-   * Rendered in a trailing actions column when supplied — this is the seam
-   * the tier-assignment control plugs into.
+   * Rendered in a trailing actions column when supplied.
    */
   renderActions?: (row: WrestlerYear) => React.ReactNode
+  /**
+   * Turns the Tier column into an inline picker. Off by default, so the
+   * read-only view for signed-out visitors is unchanged.
+   */
+  editable?: boolean
+  onTierChange?: (row: WrestlerYear, tier: string | null) => void
+  /** wrestlerId whose assignment is mid-flight, if any. */
+  savingWrestlerId?: string | null
 }
 
 /**
@@ -25,6 +33,9 @@ export default function YearStandingsTable({
   standings,
   loading = false,
   renderActions,
+  editable = false,
+  onTierChange,
+  savingWrestlerId = null,
 }: YearStandingsTableProps) {
   const columnCount = renderActions ? 7 : 6
 
@@ -77,8 +88,18 @@ export default function YearStandingsTable({
               <td className="w-32 px-3 py-2">
                 <RatingDistribution counts={row.ratingCounts} variant="strip" />
               </td>
+              {/* Rows are ordered by score, which a tier assignment does not
+                  change — so nothing jumps under the cursor during bulk work. */}
               <td className="px-3 py-2">
-                <TierBadge tier={row.yearTier} />
+                {editable && onTierChange ? (
+                  <TierSelect
+                    value={row.yearTier}
+                    onChange={(tier) => onTierChange(row, tier)}
+                    saving={savingWrestlerId === row.wrestlerId}
+                  />
+                ) : (
+                  <TierBadge tier={row.yearTier} />
+                )}
               </td>
               {renderActions && (
                 <td className="px-3 py-2 text-right">{renderActions(row)}</td>

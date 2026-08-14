@@ -2,10 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { getYearStandings, WrestlerYear } from '@/lib/api'
+import { useAuth, useUser } from '@clerk/nextjs'
+import { assignTier, getYearStandings, WrestlerYear } from '@/lib/api'
 import { errorMessage } from '@/lib/format'
 import YearStandingsTable from '@/components/Table/YearStandingsTable'
-import { TIERS } from '@/lib/tiers'
+import { TIER_POINTS, TIERS } from '@/lib/tiers'
 
 interface YearPageProps {
   params: { year: string }
@@ -15,11 +16,14 @@ const MIN_MATCHES_OPTIONS = [0, 5, 10, 20]
 
 export default function YearPage({ params }: YearPageProps) {
   const year = Number.parseInt(params.year, 10)
+  const { getToken } = useAuth()
+  const { isSignedIn } = useUser()
   const [standings, setStandings] = useState<WrestlerYear[]>([])
   const [minMatches, setMinMatches] = useState(0)
   const [tieredOnly, setTieredOnly] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [savingWrestlerId, setSavingWrestlerId] = useState<string | null>(null)
 
   const load = useCallback(async () => {
     if (!Number.isFinite(year)) {
@@ -44,6 +48,49 @@ export default function YearPage({ params }: YearPageProps) {
   useEffect(() => {
     load()
   }, [load])
+
+  /**
+   * Applied optimistically so a run of assignments stays responsive, then
+   * reconciled against the returned document. Point values come from the local
+   * TIER_POINTS mirror for the optimistic step only — the server's value is
+   * authoritative and overwrites it a moment later.
+   *
+   * Note the write also recomputes the wrestler's careerScore server-side. That
+   * is not displayed on this page, so there is nothing to refresh here; the
+   * leaderboard picks it up on its next load.
+   */
+  const handleTierChange = async (row: WrestlerYear, tier: string | null) => {
+    const previous = { yearTier: row.yearTier, yearTierPoints: row.yearTierPoints }
+
+    const patch = (id: string, next: Partial<WrestlerYear>) =>
+      setStandings((rows) =>
+        rows.map((r) => (r._id === id ? { ...r, ...next } : r)),
+      )
+
+    patch(row._id, {
+      yearTier: tier ?? undefined,
+      yearTierPoints: tier ? TIER_POINTS[tier] ?? 0 : 0,
+    })
+    setSavingWrestlerId(row.wrestlerId)
+    setError(null)
+
+    try {
+      const saved = await assignTier(row.wrestlerId, year, tier, getToken)
+      // Reconcile against the server's own values rather than trusting the
+      // optimistic guess.
+      patch(row._id, {
+        yearTier: saved.yearTier,
+        yearTierPoints: saved.yearTierPoints,
+      })
+    } catch (err) {
+      patch(row._id, previous)
+      setError(
+        errorMessage(err, `Could not set tier for ${row.displayName}`),
+      )
+    } finally {
+      setSavingWrestlerId(null)
+    }
+  }
 
   // Low-match wrestlers crowd the top of the table because the formula's
   // ln(1 + matchCount) term is generous at small sample sizes, so allow a
@@ -80,6 +127,7 @@ export default function YearPage({ params }: YearPageProps) {
             {loading
               ? 'Loading standings...'
               : `${standings.length} wrestlers with recorded matches this year.`}
+            {!loading && isSignedIn && ' Set a tier from the Tier column.'}
           </p>
         </div>
         <Link
@@ -138,6 +186,9 @@ export default function YearPage({ params }: YearPageProps) {
         <YearStandingsTable
           standings={visible}
           loading={loading}
+          editable={Boolean(isSignedIn)}
+          onTierChange={handleTierChange}
+          savingWrestlerId={savingWrestlerId}
         />
       </div>
 
