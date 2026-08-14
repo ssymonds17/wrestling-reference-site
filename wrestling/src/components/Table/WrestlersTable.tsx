@@ -1,26 +1,19 @@
 import Link from 'next/link'
-import { Wrestler, WrestlerSortBy } from '@/lib/api'
+import { Wrestler } from '@/lib/api'
 import RatingDistribution from '@/components/Rating/RatingDistribution'
 
 interface WrestlersTableProps {
   wrestlers: Wrestler[]
   loading?: boolean
-  sortBy: WrestlerSortBy
-  onSortChange: (sortBy: WrestlerSortBy) => void
   emptyMessage?: string
 }
 
-const SORTABLE: { key: WrestlerSortBy; label: string }[] = [
-  { key: 'name', label: 'Wrestler' },
-  { key: 'totalMatches', label: 'Matches' },
-  { key: 'careerScore', label: 'Career score' },
-]
-
+// Deliberately not sortable. This page is a name lookup, always alphabetical;
+// ranking by matches or career score is the leaderboard's job. The counts stay
+// as context on the row.
 export default function WrestlersTable({
   wrestlers,
   loading = false,
-  sortBy,
-  onSortChange,
   emptyMessage = 'No wrestlers found.',
 }: WrestlersTableProps) {
   return (
@@ -28,22 +21,12 @@ export default function WrestlersTable({
       <table className="w-full text-sm">
         <thead className="bg-gray-900 text-gray-400">
           <tr>
-            {SORTABLE.map(({ key, label }) => (
-              <th key={key} className="px-3 py-2 text-left font-medium">
-                <button
-                  type="button"
-                  onClick={() => onSortChange(key)}
-                  className={`hover:text-gray-200 ${
-                    sortBy === key ? 'text-blue-400' : ''
-                  }`}
-                >
-                  {label}
-                  {sortBy === key && <span aria-hidden> &darr;</span>}
-                </button>
-              </th>
-            ))}
+            <th className="px-3 py-2 text-left font-medium">Wrestler</th>
+            <th className="px-3 py-2 text-left font-medium">Matches</th>
+            <th className="px-3 py-2 text-left font-medium">Career score</th>
             <th className="px-3 py-2 text-left font-medium">Aliases</th>
             <th className="px-3 py-2 text-left font-medium">Ratings</th>
+            <th className="px-3 py-2 text-right font-medium">Cagematch</th>
           </tr>
         </thead>
         <tbody>
@@ -74,18 +57,33 @@ export default function WrestlersTable({
               <td className="w-32 px-3 py-2">
                 <RatingDistribution counts={wrestler.ratingCounts} variant="strip" />
               </td>
+              <td className="whitespace-nowrap px-3 py-2 text-right">
+                {wrestler.cagematchUrl ? (
+                  <a
+                    href={wrestler.cagematchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={`${wrestler.displayName} on Cagematch`}
+                    className="text-sm text-blue-400 hover:text-blue-300"
+                  >
+                    Profile ↗
+                  </a>
+                ) : (
+                  <span className="text-gray-700">&mdash;</span>
+                )}
+              </td>
             </tr>
           ))}
           {loading && (
             <tr>
-              <td colSpan={5} className="px-3 py-6 text-center text-gray-500">
+              <td colSpan={6} className="px-3 py-6 text-center text-gray-500">
                 Loading wrestlers...
               </td>
             </tr>
           )}
           {!loading && wrestlers.length === 0 && (
             <tr>
-              <td colSpan={5} className="px-3 py-6 text-center text-gray-500">
+              <td colSpan={6} className="px-3 py-6 text-center text-gray-500">
                 {emptyMessage}
               </td>
             </tr>
