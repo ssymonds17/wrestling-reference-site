@@ -1,237 +1,104 @@
-"use client"
+'use client'
 
-import { useCallback, useEffect, useState } from "react"
-import axios from "axios"
-import { useAuth } from "@clerk/nextjs"
-import ProtectedRoute from "@/components/Auth/ProtectedRoute"
-import { createWrestler, getWrestlers, Wrestler } from "@/lib/api"
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import Link from 'next/link'
+import { SignedIn } from '@clerk/nextjs'
+import WrestlersTable from '@/components/Table/WrestlersTable'
+import { getWrestlers, Wrestler, WrestlerSortBy } from '@/lib/api'
+import { errorMessage } from '@/lib/format'
 
-interface FormState {
-  displayName: string
-  aliases: string
-  cagematchUrl: string
-}
+// The API caps this list server-side at whatever limit we send (defaulting to
+// 500, which is below the current roster), so ask for comfortably more than
+// the roster size and filter client-side.
+const FETCH_LIMIT = 2000
 
-const EMPTY_FORM: FormState = {
-  displayName: "",
-  aliases: "",
-  cagematchUrl: "",
-}
-
-const splitList = (raw: string): string[] =>
-  raw
-    .split(",")
-    .map((item) => item.trim())
-    .filter((item) => item.length > 0)
-
-const errorMessage = (err: unknown, fallback: string): string => {
-  if (axios.isAxiosError(err)) {
-    return err.response?.data?.message ?? err.message ?? fallback
-  }
-  return err instanceof Error ? err.message : fallback
-}
-
-const inputClasses =
-  "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
-
-function Wrestlers() {
-  const { getToken } = useAuth()
-  const [form, setForm] = useState<FormState>(EMPTY_FORM)
-  const [wrestlers, setWrestlers] = useState<Wrestler[]>([])
-  const [loading, setLoading] = useState(true)
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<string | null>(null)
-
-  const loadWrestlers = useCallback(async () => {
-    setLoading(true)
-    try {
-      const { data } = await getWrestlers()
-      setWrestlers(data)
-    } catch (err) {
-      setError(errorMessage(err, "Could not load wrestlers"))
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    loadWrestlers()
-  }, [loadWrestlers])
-
-  const update =
-    (field: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement>) =>
-      setForm((prev) => ({ ...prev, [field]: e.target.value }))
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-    setSuccess(null)
-
-    if (!form.displayName.trim()) {
-      setError("Display name is required")
-      return
-    }
-
-    setSubmitting(true)
-    try {
-      const created = await createWrestler(
-        {
-          displayName: form.displayName.trim(),
-          aliases: splitList(form.aliases),
-          cagematchUrl: form.cagematchUrl.trim() || undefined,
-        },
-        getToken,
-      )
-      setSuccess(`Created "${created.displayName}" (id ${created.id})`)
-      setForm(EMPTY_FORM)
-      await loadWrestlers()
-    } catch (err) {
-      setError(errorMessage(err, "Could not create wrestler"))
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
+const matchesQuery = (wrestler: Wrestler, query: string): boolean => {
+  if (!query) return true
+  const q = query.toLowerCase()
   return (
-    <div className="max-w-4xl">
-      <h1 className="text-3xl font-bold">Wrestlers</h1>
-      <p className="text-gray-400 mt-1 mb-6 text-sm">
-        Browse wrestlers and add new ones. Matches and career score stay at 0
-        until matches are ingested and recomputed.
-      </p>
-
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-4 bg-gray-900/50 border border-gray-800 rounded p-5 mb-8"
-      >
-        <div>
-          <label className="block text-sm text-gray-300 mb-1">
-            Display name <span className="text-red-400">*</span>
-          </label>
-          <input
-            className={inputClasses}
-            value={form.displayName}
-            onChange={update("displayName")}
-            placeholder="Ric Flair"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm text-gray-300 mb-1">
-            Other names / aliases{" "}
-            <span className="text-gray-500">(comma-separated)</span>
-          </label>
-          <input
-            className={inputClasses}
-            value={form.aliases}
-            onChange={update("aliases")}
-            placeholder="Nature Boy, Black Scorpion"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm text-gray-300 mb-1">
-            Cagematch URL <span className="text-gray-500">(optional)</span>
-          </label>
-          <input
-            className={inputClasses}
-            value={form.cagematchUrl}
-            onChange={update("cagematchUrl")}
-            placeholder="https://www.cagematch.net/?id=2&nr=..."
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 border border-blue-600 rounded text-sm font-medium transition-colors"
-        >
-          {submitting ? "Creating..." : "Create wrestler"}
-        </button>
-
-        {error && <p className="text-sm text-red-400">{error}</p>}
-        {success && <p className="text-sm text-green-400">{success}</p>}
-      </form>
-
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-xl font-semibold">
-          Stored wrestlers{" "}
-          <span className="text-gray-500 text-base">({wrestlers.length})</span>
-        </h2>
-        <button
-          onClick={loadWrestlers}
-          disabled={loading}
-          className="text-sm text-blue-400 hover:text-blue-300 disabled:opacity-50"
-        >
-          {loading ? "Loading..." : "Refresh"}
-        </button>
-      </div>
-
-      <div className="overflow-x-auto border border-gray-800 rounded">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-900 text-gray-400 text-left">
-            <tr>
-              <th className="px-3 py-2 font-medium">Display name</th>
-              <th className="px-3 py-2 font-medium">name</th>
-              <th className="px-3 py-2 font-medium">Aliases</th>
-              <th className="px-3 py-2 font-medium">Cagematch</th>
-              <th className="px-3 py-2 font-medium">Matches</th>
-              <th className="px-3 py-2 font-medium">Career Score</th>
-              <th className="px-3 py-2 font-medium">ID</th>
-            </tr>
-          </thead>
-          <tbody>
-            {wrestlers.map((wrestler) => (
-              <tr key={wrestler._id} className="border-t border-gray-800">
-                <td className="px-3 py-2">{wrestler.displayName}</td>
-                <td className="px-3 py-2 text-gray-400">{wrestler.name}</td>
-                <td className="px-3 py-2 text-gray-400">
-                  {wrestler.aliases.map((alias) => alias.display).join(", ")}
-                </td>
-                <td className="px-3 py-2 text-gray-400">
-                  {wrestler.cagematchUrl ? (
-                    <a
-                      href={wrestler.cagematchUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-blue-400 hover:text-blue-300"
-                    >
-                      link
-                    </a>
-                  ) : (
-                    "-"
-                  )}
-                </td>
-                <td className="px-3 py-2 text-gray-400">
-                  {wrestler.totalMatches}
-                </td>
-                <td className="px-3 py-2 text-gray-400">
-                  {wrestler.careerScore}
-                </td>
-                <td className="px-3 py-2 text-gray-500 font-mono text-xs">
-                  {wrestler._id}
-                </td>
-              </tr>
-            ))}
-            {!loading && wrestlers.length === 0 && (
-              <tr>
-                <td colSpan={7} className="px-3 py-6 text-center text-gray-500">
-                  No wrestlers yet.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    wrestler.name.includes(q) ||
+    wrestler.displayName.toLowerCase().includes(q) ||
+    wrestler.aliases.some((alias) => alias.search.includes(q))
   )
 }
 
 export default function WrestlersPage() {
+  const [wrestlers, setWrestlers] = useState<Wrestler[]>([])
+  const [sortBy, setSortBy] = useState<WrestlerSortBy>('careerScore')
+  const [query, setQuery] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  const load = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const { data } = await getWrestlers({ sortBy, limit: FETCH_LIMIT })
+      setWrestlers(data)
+    } catch (err) {
+      setError(errorMessage(err, 'Could not load wrestlers'))
+    } finally {
+      setLoading(false)
+    }
+  }, [sortBy])
+
+  useEffect(() => {
+    load()
+  }, [load])
+
+  // Filtering is local: the whole roster is already in memory, and the
+  // alias-aware /search endpoint would lose the current sort order.
+  const visible = useMemo(
+    () => wrestlers.filter((wrestler) => matchesQuery(wrestler, query.trim())),
+    [wrestlers, query],
+  )
+
   return (
-    <ProtectedRoute>
-      <Wrestlers />
-    </ProtectedRoute>
+    <div>
+      <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">Wrestlers</h1>
+          <p className="mt-1 text-sm text-gray-400">
+            {loading
+              ? 'Loading roster...'
+              : `${wrestlers.length} wrestlers. Sort by any column heading.`}
+          </p>
+        </div>
+        <SignedIn>
+          <Link
+            href="/wrestler/new"
+            className="shrink-0 rounded border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-medium hover:bg-blue-700"
+          >
+            Add wrestler
+          </Link>
+        </SignedIn>
+      </div>
+
+      <div className="mb-4 flex items-center gap-3">
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Filter by name or alias..."
+          className="w-full max-w-sm rounded border border-gray-700 bg-gray-900 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+        />
+        {query && (
+          <span className="whitespace-nowrap text-sm text-gray-500">
+            {visible.length} match{visible.length === 1 ? '' : 'es'}
+          </span>
+        )}
+      </div>
+
+      {error && <p className="mb-3 text-sm text-red-400">{error}</p>}
+
+      <WrestlersTable
+        wrestlers={visible}
+        loading={loading}
+        sortBy={sortBy}
+        onSortChange={setSortBy}
+        emptyMessage={
+          query ? 'No wrestlers match that filter.' : 'No wrestlers yet.'
+        }
+      />
+    </div>
   )
 }
