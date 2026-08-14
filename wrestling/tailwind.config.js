@@ -8,8 +8,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Performance rating colours (1-5); also used as the base scale for
-        // overall match ratings which span 1-5 with quarter-point increments.
+        // Performance rating colours (1-5) only. Overall match ratings have
+        // their own non-gradient scheme defined in
+        // src/components/Rating/MatchRatingBadge.tsx.
         rating: {
           1: '#ef4444',  // red     — Negative
           2: '#f97316',  // orange  — Neutral
