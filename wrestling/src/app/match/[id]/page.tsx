@@ -98,9 +98,12 @@ export default function MatchPage({ params }: MatchPageProps) {
           </h1>
           <p className="mt-1 text-gray-400">{match.matchTitle}</p>
         </div>
-        <div className="text-right">
+        {/* Centred rather than right-aligned: this block wraps below the
+            title on narrow viewports and long match names, where its width
+            collapses to the label and a right-aligned badge looks adrift. */}
+        <div className="text-center">
           <MatchRatingBadge rating={match.overallMatchRating} size="lg" />
-          <div className="mt-1 text-xs text-gray-500">overall rating</div>
+          <div className="mt-1 text-xs text-gray-500">Rating</div>
         </div>
       </div>
 
