@@ -2,11 +2,16 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Match } from "@/lib/api"
+import { Match, MatchSortBy, MatchSortDir } from "@/lib/api"
 import { formatDate } from "@/lib/format"
 import MatchRatingBadge from "@/components/Rating/MatchRatingBadge"
 import PerformanceBadge from "@/components/Rating/PerformanceBadge"
 import ParticipantsModal from "@/components/Modal/ParticipantsModal"
+
+export interface MatchSort {
+  sortBy: MatchSortBy
+  sortDir: MatchSortDir
+}
 
 interface MatchesTableProps {
   matches: Match[]
@@ -17,17 +22,68 @@ interface MatchesTableProps {
    */
   highlightWrestlerId?: string
   emptyMessage?: string
+  /**
+   * Supply both to make Rating and Date sortable. Sorting is server-side, so
+   * omitting these leaves the headers as plain text rather than offering a
+   * control that would only reorder the current page.
+   */
+  sort?: MatchSort
+  onSortChange?: (sort: MatchSort) => void
 }
 
 const HeaderCell = ({ children }: { children: React.ReactNode }) => (
   <th className="px-3 py-2 text-left font-medium">{children}</th>
 )
 
+/**
+ * Clicking the active column flips direction; clicking a new one starts
+ * descending, which is the more useful default for both a date and a rating.
+ */
+const nextSort = (current: MatchSort, sortBy: MatchSortBy): MatchSort =>
+  current.sortBy === sortBy
+    ? { sortBy, sortDir: current.sortDir === "desc" ? "asc" : "desc" }
+    : { sortBy, sortDir: "desc" }
+
+const SortableHeader = ({
+  label,
+  sortBy,
+  sort,
+  onSortChange,
+}: {
+  label: string
+  sortBy: MatchSortBy
+  sort?: MatchSort
+  onSortChange?: (sort: MatchSort) => void
+}) => {
+  if (!sort || !onSortChange) return <HeaderCell>{label}</HeaderCell>
+
+  const active = sort.sortBy === sortBy
+
+  return (
+    <th className="px-3 py-2 text-left font-medium">
+      <button
+        type="button"
+        onClick={() => onSortChange(nextSort(sort, sortBy))}
+        aria-label={`Sort by ${label.toLowerCase()}`}
+        className={`hover:text-gray-200 ${active ? "text-blue-400" : ""}`}
+      >
+        {label}
+        <span aria-hidden className={active ? "" : "text-gray-700"}>
+          {" "}
+          {active && sort.sortDir === "asc" ? "↑" : "↓"}
+        </span>
+      </button>
+    </th>
+  )
+}
+
 export default function MatchesTable({
   matches,
   loading = false,
   highlightWrestlerId,
   emptyMessage = "No matches found.",
+  sort,
+  onSortChange,
 }: MatchesTableProps) {
   const perspective = Boolean(highlightWrestlerId)
   const [openMatch, setOpenMatch] = useState<Match | null>(null)
@@ -38,8 +94,18 @@ export default function MatchesTable({
         <table className="w-full text-sm">
           <thead className="bg-gray-900 text-gray-400">
             <tr>
-              <HeaderCell>Rating</HeaderCell>
-              <HeaderCell>Date</HeaderCell>
+              <SortableHeader
+                label="Rating"
+                sortBy="rating"
+                sort={sort}
+                onSortChange={onSortChange}
+              />
+              <SortableHeader
+                label="Date"
+                sortBy="date"
+                sort={sort}
+                onSortChange={onSortChange}
+              />
               <HeaderCell>Promotion</HeaderCell>
               <HeaderCell>Show</HeaderCell>
               <HeaderCell>Match</HeaderCell>

@@ -12,7 +12,7 @@ import {
 } from '@/lib/api'
 import { errorMessage, formatScore } from '@/lib/format'
 import { scoreBreakdown } from '@/lib/score'
-import MatchesTable from '@/components/Table/MatchesTable'
+import MatchesTable, { MatchSort } from '@/components/Table/MatchesTable'
 import Pagination from '@/components/Pagination'
 import RatingDistribution from '@/components/Rating/RatingDistribution'
 import TierBadge from '@/components/TierBadge'
@@ -47,6 +47,11 @@ export default function WrestlerPage({ params }: WrestlerPageProps) {
   const [wrestler, setWrestler] = useState<Wrestler | null>(null)
   const [years, setYears] = useState<WrestlerYear[]>([])
   const [matches, setMatches] = useState<Match[]>([])
+  const [matchTotal, setMatchTotal] = useState(0)
+  const [sort, setSort] = useState<MatchSort>({
+    sortBy: 'date',
+    sortDir: 'desc',
+  })
   const [offset, setOffset] = useState(0)
   const [loading, setLoading] = useState(true)
   const [matchesLoading, setMatchesLoading] = useState(true)
@@ -78,22 +83,32 @@ export default function WrestlerPage({ params }: WrestlerPageProps) {
   const loadMatches = useCallback(async () => {
     setMatchesLoading(true)
     try {
-      const { data } = await getMatches({
+      const { data, total } = await getMatches({
         wrestlerId: params.id,
+        sortBy: sort.sortBy,
+        sortDir: sort.sortDir,
         limit: PAGE_SIZE,
         offset,
       })
       setMatches(data)
+      setMatchTotal(total)
     } catch (err) {
       setError(errorMessage(err, 'Could not load matches'))
     } finally {
       setMatchesLoading(false)
     }
-  }, [params.id, offset])
+  }, [params.id, sort, offset])
 
   useEffect(() => {
     loadMatches()
   }, [loadMatches])
+
+  // Changing the sort resets paging — page 3 of the old order is meaningless
+  // against the new one.
+  const handleSortChange = (next: MatchSort) => {
+    setSort(next)
+    setOffset(0)
+  }
 
   if (loading) {
     return <p className="text-sm text-gray-500">Loading wrestler...</p>
@@ -265,12 +280,15 @@ export default function WrestlerPage({ params }: WrestlerPageProps) {
           loading={matchesLoading}
           highlightWrestlerId={wrestler._id}
           emptyMessage="No matches recorded for this wrestler."
+          sort={sort}
+          onSortChange={handleSortChange}
         />
 
         <Pagination
           offset={offset}
           limit={PAGE_SIZE}
           pageCount={matches.length}
+          total={matchTotal}
           onOffsetChange={setOffset}
           loading={matchesLoading}
         />

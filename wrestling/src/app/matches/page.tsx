@@ -7,7 +7,7 @@ import { SignedIn } from '@clerk/nextjs'
 import MatchFilters, {
   MatchFilterState,
 } from '@/components/Filters/MatchFilters'
-import MatchesTable from '@/components/Table/MatchesTable'
+import MatchesTable, { MatchSort } from '@/components/Table/MatchesTable'
 import Pagination from '@/components/Pagination'
 import {
   getMatches,
@@ -15,6 +15,8 @@ import {
   getWrestlerById,
   getYears,
   Match,
+  MatchSortBy,
+  MatchSortDir,
   Promotion,
   Wrestler,
   YearSummary,
@@ -29,6 +31,25 @@ const EMPTY_FILTERS: MatchFilterState = {
   minOverallRating: '',
 }
 
+const DEFAULT_SORT: MatchSort = { sortBy: 'date', sortDir: 'desc' }
+
+const VALID_SORT_BY: MatchSortBy[] = ['date', 'rating']
+const VALID_SORT_DIR: MatchSortDir[] = ['asc', 'desc']
+
+// An unrecognised value in the URL falls back to the default rather than
+// erroring, matching how the API treats the same params.
+const sortFromParams = (
+  sortBy: string | null,
+  sortDir: string | null,
+): MatchSort => ({
+  sortBy: VALID_SORT_BY.includes(sortBy as MatchSortBy)
+    ? (sortBy as MatchSortBy)
+    : DEFAULT_SORT.sortBy,
+  sortDir: VALID_SORT_DIR.includes(sortDir as MatchSortDir)
+    ? (sortDir as MatchSortDir)
+    : DEFAULT_SORT.sortDir,
+})
+
 function Matches() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -41,11 +62,15 @@ function Matches() {
     minOverallRating: searchParams.get('minOverallRating') ?? '',
   })
   const [wrestler, setWrestler] = useState<Wrestler | null>(null)
+  const [sort, setSort] = useState<MatchSort>(
+    sortFromParams(searchParams.get('sortBy'), searchParams.get('sortDir')),
+  )
   const [offset, setOffset] = useState(
     Number.parseInt(searchParams.get('offset') ?? '0', 10) || 0,
   )
 
   const [matches, setMatches] = useState<Match[]>([])
+  const [total, setTotal] = useState(0)
   const [promotions, setPromotions] = useState<Promotion[]>([])
   const [years, setYears] = useState<YearSummary[]>([])
   const [loading, setLoading] = useState(true)
@@ -96,30 +121,38 @@ function Matches() {
     setLoading(true)
     setError(null)
     try {
-      const { data } = await getMatches({
+      const { data, total: matchTotal } = await getMatches({
         year: filters.year ? Number(filters.year) : undefined,
         promotionId: filters.promotionId || undefined,
         wrestlerId: wrestler?._id,
         minOverallRating: filters.minOverallRating
           ? Number(filters.minOverallRating)
           : undefined,
+        sortBy: sort.sortBy,
+        sortDir: sort.sortDir,
         limit: PAGE_SIZE,
         offset,
       })
       setMatches(data)
+      setTotal(matchTotal)
     } catch (err) {
       setError(errorMessage(err, 'Could not load matches'))
     } finally {
       setLoading(false)
     }
-  }, [filters, wrestler, offset])
+  }, [filters, wrestler, sort, offset])
 
   useEffect(() => {
     loadMatches()
   }, [loadMatches])
 
   const syncUrl = useCallback(
-    (next: MatchFilterState, nextWrestlerId: string | null, nextOffset: number) => {
+    (
+      next: MatchFilterState,
+      nextWrestlerId: string | null,
+      nextSort: MatchSort,
+      nextOffset: number,
+    ) => {
       const params = new URLSearchParams()
       if (next.year) params.set('year', next.year)
       if (next.promotionId) params.set('promotionId', next.promotionId)
@@ -127,6 +160,14 @@ function Matches() {
         params.set('minOverallRating', next.minOverallRating)
       }
       if (nextWrestlerId) params.set('wrestlerId', nextWrestlerId)
+      // Only non-default sorts go in the URL, so a plain /matches link stays
+      // clean and the default order is implied.
+      if (nextSort.sortBy !== DEFAULT_SORT.sortBy) {
+        params.set('sortBy', nextSort.sortBy)
+      }
+      if (nextSort.sortDir !== DEFAULT_SORT.sortDir) {
+        params.set('sortDir', nextSort.sortDir)
+      }
       if (nextOffset > 0) params.set('offset', String(nextOffset))
       const query = params.toString()
       router.replace(query ? `/matches?${query}` : '/matches', { scroll: false })
@@ -134,31 +175,38 @@ function Matches() {
     [router],
   )
 
-  // Any filter change resets paging — page 3 of the old result set is
+  // Any filter or sort change resets paging — page 3 of the old result set is
   // meaningless against the new one.
   const handleFilterChange = (next: MatchFilterState) => {
     setFilters(next)
     setOffset(0)
-    syncUrl(next, wrestler?._id ?? null, 0)
+    syncUrl(next, wrestler?._id ?? null, sort, 0)
   }
 
   const handleWrestlerChange = (next: Wrestler | null) => {
     setWrestler(next)
     setOffset(0)
-    syncUrl(filters, next?._id ?? null, 0)
+    syncUrl(filters, next?._id ?? null, sort, 0)
+  }
+
+  const handleSortChange = (next: MatchSort) => {
+    setSort(next)
+    setOffset(0)
+    syncUrl(filters, wrestler?._id ?? null, next, 0)
   }
 
   const handleOffsetChange = (next: number) => {
     setOffset(next)
-    syncUrl(filters, wrestler?._id ?? null, next)
+    syncUrl(filters, wrestler?._id ?? null, sort, next)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleReset = () => {
     setFilters(EMPTY_FILTERS)
     setWrestler(null)
+    setSort(DEFAULT_SORT)
     setOffset(0)
-    syncUrl(EMPTY_FILTERS, null, 0)
+    syncUrl(EMPTY_FILTERS, null, DEFAULT_SORT, 0)
   }
 
   return (
@@ -188,17 +236,23 @@ function Matches() {
         promotions={promotions}
         years={years}
         onReset={handleReset}
-        resultCount={matches.length}
+        resultCount={total}
       />
 
       {error && <p className="mb-3 text-sm text-red-400">{error}</p>}
 
-      <MatchesTable matches={matches} loading={loading} />
+      <MatchesTable
+        matches={matches}
+        loading={loading}
+        sort={sort}
+        onSortChange={handleSortChange}
+      />
 
       <Pagination
         offset={offset}
         limit={PAGE_SIZE}
         pageCount={matches.length}
+        total={total}
         onOffsetChange={handleOffsetChange}
         loading={loading}
       />

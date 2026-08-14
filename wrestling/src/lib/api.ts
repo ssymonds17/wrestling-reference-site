@@ -221,22 +221,33 @@ export interface CreateMatchResponse {
 
 // GET /matches is public; POST /match requires a Clerk JWT.
 
+/**
+ * Sorting by a wrestler's own performance rating is not supported yet — it
+ * lives inside the participants array, so it needs an aggregation on the API
+ * side. See Follow-ups in PLAN.md.
+ */
+export type MatchSortBy = 'date' | 'rating'
+export type MatchSortDir = 'asc' | 'desc'
+
 export interface MatchFilters {
   year?: number
   promotionId?: string
   wrestlerId?: string
   minOverallRating?: number
+  sortBy?: MatchSortBy
+  sortDir?: MatchSortDir
   limit?: number
   offset?: number
 }
 
 export interface PagedResponse<T> extends ListResponse<T> {
+  /** Rows matching the filter in total, ignoring the page window. */
+  total: number
   limit: number
   offset: number
+  sortBy: MatchSortBy
+  sortDir: MatchSortDir
 }
-
-// Note: the API returns no grand total, only the size of the page it served.
-// Pagination is therefore "next page exists if this page came back full".
 export const getMatches = async (
   filters: MatchFilters = {},
 ): Promise<PagedResponse<Match>> => {
